@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JDmatcher - Lakshya Tripathi</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --text-primary: #e94560;
+            --text-secondary: #f5f5f5;
+            --text-muted: #a0a0a0;
+            --accent: #0f3460;
+            --accent-bright: #e94560;
+            --accent-secondary: #f39c12;
+            --border: #2c2c54;
+            --card-bg: #16213e;
+            --shadow: rgba(233, 69, 96, 0.2);
+            --gradient: linear-gradient(135deg, #e94560, #f39c12);
+            --gradient-2: linear-gradient(135deg, #0f3460, #e94560);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e9ecef;
+            --text-primary: #2c2c54;
+            --text-secondary: #343a40;
+            --text-muted: #6c757d;
+            --accent: #e94560;
+            --accent-bright: #0f3460;
+            --accent-secondary: #f39c12;
+            --border: #dee2e6;
+            --card-bg: #ffffff;
+            --shadow: rgba(44, 44, 84, 0.1);
+            --gradient: linear-gradient(135deg, #e94560, #f39c12);
+            --gradient-2: linear-gradient(135deg, #0f3460, #e94560);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-bright);
+            border-radius: 3px;
+        }
+
+        .container {
+            max-width: 1200px; margin: 0 auto; padding: 0 2rem;
+        }
+
+        /* Header */
+        header {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(15, 15, 35, 0.95); backdrop-filter: blur(20px);
+            z-index: 1000; border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        
+        nav { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 1rem 0; height: 70px; 
+        }
+        
+        .logo { 
+            font-weight: 800; font-size: 1.5rem; color: var(--text-primary); 
+            text-decoration: none; font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a {
+            color: var(--text-secondary); text-decoration: none; font-weight: 500;
+            font-size: 0.9rem; position: relative; transition: all 0.3s ease;
+            padding: 0.5rem 1rem; border-radius: 20px;
+        }
+        .nav-links a:hover { 
+            color: var(--text-primary); background: var(--accent);
+        }
+
+        .nav-right { display: flex; align-items: center; gap: 1rem; }
+        
+        .theme-toggle {
+            background: var(--card-bg); border: none; color: var(--text-muted);
+            font-size: 1rem; cursor: pointer; padding: 0.5rem; border-radius: 50%;
+            width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover { color: var(--text-primary); }
+
+        .back-btn {
+            background: var(--card-bg); border: 1px solid var(--border); color: var(--text-secondary);
+            padding: 0.5rem 1rem; border-radius: 25px; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            transition: all 0.3s ease; font-weight: 500;
+        }
+        .back-btn:hover { border-color: var(--accent-bright); color: var(--text-primary); }
+
+        /* Main Content */
+        main { margin-top: 70px; padding: 4rem 0; }
+
+        .project-hero {
+            text-align: center; margin-bottom: 4rem;
+        }
+
+        .project-title {
+            font-size: 3rem; font-weight: 800; margin-bottom: 1rem;
+            background: var(--gradient); -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; background-clip: text;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .project-subtitle {
+            font-size: 1.2rem; color: var(--text-muted); max-width: 800px;
+            margin: 0 auto 2rem; line-height: 1.6;
+        }
+
+        .project-badges {
+            display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .badge {
+            background: var(--card-bg); color: var(--text-primary); padding: 0.5rem 1rem;
+            border-radius: 20px; font-size: 0.9rem; font-weight: 600;
+            border: 1px solid var(--border);
+        }
+
+        .project-links {
+            display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem; border: none; border-radius: 25px; font-weight: 600;
+            text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
+            transition: all 0.3s ease; font-size: 0.9rem; cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--gradient); color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px var(--shadow); }
+
+        .btn-secondary {
+            background: transparent; color: var(--text-secondary); border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { background: var(--card-bg); border-color: var(--accent-bright); }
+
+        /* Content Sections */
+        .content-section {
+            background: var(--card-bg); border-radius: 20px; padding: 2rem;
+            border: 1px solid var(--border); margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem;
+            color: var(--text-primary); font-family: 'JetBrains Mono', monospace;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+
+        .features-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem; margin-top: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-primary); padding: 1.5rem; border-radius: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .feature-card h4 {
+            color: var(--text-primary); margin-bottom: 0.5rem; font-weight: 600;
+        }
+
+        .feature-card p {
+            color: var(--text-muted); font-size: 0.9rem;
+        }
+
+        .setup-steps {
+            counter-reset: step-counter;
+        }
+
+        .setup-step {
+            background: var(--bg-primary); padding: 1.5rem; border-radius: 15px;
+            border: 1px solid var(--border); margin-bottom: 1.5rem;
+            counter-increment: step-counter;
+            position: relative;
+        }
+
+        .setup-step::before {
+            content: counter(step-counter);
+            position: absolute; top: -10px; left: 20px;
+            background: var(--gradient); color: white; border-radius: 50%;
+            width: 30px; height: 30px; display: flex; align-items: center;
+            justify-content: center; font-weight: bold; font-size: 0.9rem;
+        }
+
+        .setup-step h4 {
+            color: var(--text-primary); margin-bottom: 1rem; margin-top: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .code-block {
+            background: var(--bg-secondary); padding: 1rem; border-radius: 10px;
+            border: 1px solid var(--border); margin: 1rem 0;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
+            color: var(--text-secondary); overflow-x: auto;
+        }
+
+        .usage-grid {
+            display: grid; gap: 1rem; margin-top: 1rem;
+        }
+
+        .usage-step {
+            background: var(--bg-primary); padding: 1rem; border-radius: 10px;
+            border: 1px solid var(--border); display: flex; align-items: flex-start; gap: 1rem;
+        }
+
+        .usage-number {
+            background: var(--gradient); color: white; border-radius: 50%;
+            width: 25px; height: 25px; display: flex; align-items: center;
+            justify-content: center; font-weight: bold; font-size: 0.8rem;
+            flex-shrink: 0; margin-top: 0.2rem;
+        }
+
+        .usage-content h4 {
+            color: var(--text-primary); margin-bottom: 0.3rem; font-size: 0.95rem;
+        }
+
+        .usage-content p {
+            color: var(--text-muted); font-size: 0.85rem;
+        }
+
+        .example-box {
+            background: var(--bg-primary); padding: 1.5rem; border-radius: 15px;
+            border: 1px solid var(--border); margin: 1rem 0;
+        }
+
+        .match-score {
+            font-size: 2rem; font-weight: 700; color: var(--accent-secondary);
+            margin-bottom: 1rem; text-align: center;
+        }
+
+        .config-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem; margin-top: 1rem;
+        }
+
+        .config-item {
+            background: var(--bg-primary); padding: 1rem; border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .config-item h4 {
+            color: var(--text-primary); margin-bottom: 0.5rem; font-size: 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .config-item p {
+            color: var(--text-muted); font-size: 0.8rem;
+        }
+
+        .author-section {
+            text-align: center; padding-top: 2rem; border-top: 1px solid var(--border);
+        }
+
+        .author-name {
+            font-size: 1.2rem; font-weight: 600; color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .tag-heart {
+            color: var(--accent-bright); font-size: 1.1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .project-title { font-size: 2rem; }
+            .container { padding: 0 1rem; }
+            .setup-step { padding-left: 2rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .config-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="../index.html" class="logo">lakshy.</a>
+            <div class="nav-links">
+                <a href="../index.html#home">Home</a>
+                <a href="../index.html#about">About</a>
+                <a href="../index.html#skills">Skills</a>
+                <a href="../index.html#projects">Projects</a>
+                <a href="../index.html#contact">Contact</a>
+            </div>
+            <div class="nav-right">
+                <a href="../index.html#projects" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Projects
+                </a>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="project-hero">
+                <h1 class="project-title">JDmatcher 📄</h1>
+                <p class="project-subtitle">
+                    A powerful AI-powered tool that analyzes your resume against job descriptions to provide match scores, 
+                    detailed analysis, and personalized recommendations to help you improve your job applications.
+                </p>
+                <div class="project-badges">
+                    <span class="badge">Python</span>
+                    <span class="badge">Streamlit</span>
+                    <span class="badge">Groq AI</span>
+                    <span class="badge">Llama 3.3 70B</span>
+                    <span class="badge">PDF Processing</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/lakshya1410/JDmatcher" class="btn btn-primary" target="_blank">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                    <a href="#" class="btn btn-secondary">
+                        <i class="fas fa-external-link-alt"></i> Live Demo
+                    </a>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-star"></i> Features
+                </h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h4><i class="fas fa-brain"></i> Smart Analysis</h4>
+                        <p>Uses Groq's Llama 3.3 70B model to analyze resume-job description compatibility with advanced AI.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-percentage"></i> Match Scoring</h4>
+                        <p>Get a precise percentage match score between your resume and target job requirements.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-chart-gap"></i> Skills Gap Analysis</h4>
+                        <p>Identify missing skills and qualifications needed for the role with detailed recommendations.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-magic"></i> Resume Enhancement</h4>
+                        <p>Receive personalized recommendations to improve your application and increase match score.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-download"></i> Downloadable Reports</h4>
+                        <p>Export analysis in Markdown or plain text formats for future reference and tracking.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-memory"></i> Session Caching</h4>
+                        <p>Results are cached to provide consistent scores and reduce API calls for efficiency.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-list-check"></i> Requirements
+                </h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h4><i class="fab fa-python"></i> Python 3.8+</h4>
+                        <p>Latest Python version for optimal performance</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-stream"></i> Streamlit 1.32.0+</h4>
+                        <p>Modern web framework for the user interface</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-file-pdf"></i> PyPDF2 3.0.1+</h4>
+                        <p>PDF processing library for resume parsing</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-network-wired"></i> Requests 2.31.0+</h4>
+                        <p>HTTP library for API communications</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-sync"></i> Asyncio 3.4.3+</h4>
+                        <p>Asynchronous programming support</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-key"></i> Groq API Key</h4>
+                        <p>Free API key from groq.com for AI analysis</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-rocket"></i> Installation
+                </h2>
+                <div class="setup-steps">
+                    <div class="setup-step">
+                        <h4>Clone the Repository</h4>
+                        <div class="code-block">
+git clone https://github.com/lakshya1410/jdmatcher.git
+cd jdmatcher
+                        </div>
+                    </div>
+
+                    <div class="setup-step">
+                        <h4>Install Dependencies</h4>
+                        <div class="code-block">
+pip install -r requirements.txt
+                        </div>
+                    </div>
+
+                    <div class="setup-step">
+                        <h4>Run the Application</h4>
+                        <div class="code-block">
+streamlit run app.py
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-lightbulb"></i> How to Use
+                </h2>
+                <div class="usage-grid">
+                    <div class="usage-step">
+                        <div class="usage-number">1</div>
+                        <div class="usage-content">
+                            <h4>Get your API Key</h4>
+                            <p>Sign up for a free Groq API key at groq.com</p>
+                        </div>
+                    </div>
+                    <div class="usage-step">
+                        <div class="usage-number">2</div>
+                        <div class="usage-content">
+                            <h4>Launch the App</h4>
+                            <p>Run the application using Streamlit</p>
+                        </div>
+                    </div>
+                    <div class="usage-step">
+                        <div class="usage-number">3</div>
+                        <div class="usage-content">
+                            <h4>Enter your API Key</h4>
+                            <p>Input your Groq API key in the sidebar</p>
+                        </div>
+                    </div>
+                    <div class="usage-step">
+                        <div class="usage-number">4</div>
+                        <div class="usage-content">
+                            <h4>Upload Resume</h4>
+                            <p>Upload your resume in PDF format</p>
+                        </div>
+                    </div>
+                    <div class="usage-step">
+                        <div class="usage-number">5</div>
+                        <div class="usage-content">
+                            <h4>Add Job Description</h4>
+                            <p>Copy and paste the job description text into the sidebar</p>
+                        </div>
+                    </div>
+                    <div class="usage-step">
+                        <div class="usage-number">6</div>
+                        <div class="usage-content">
+                            <h4>Analyze</h4>
+                            <p>Click "Analyze Match" and wait for the results</p>
+                        </div>
+                    </div>
+                    <div class="usage-step">
+                        <div class="usage-number">7</div>
+                        <div class="usage-content">
+                            <h4>Review Report</h4>
+                            <p>Check your match score, strengths, and improvement areas</p>
+                        </div>
+                    </div>
+                    <div class="usage-step">
+                        <div class="usage-number">8</div>
+                        <div class="usage-content">
+                            <h4>Download Report</h4>
+                            <p>Save your analysis as either Markdown or Text format</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-cogs"></i> How It Works
+                </h2>
+                <p style="color: var(--text-muted); margin-bottom: 2rem;">
+                    JDmatcher follows a sophisticated 4-step analysis process:
+                </p>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h4><i class="fas fa-file-alt"></i> Resume Analysis</h4>
+                        <p>The AI extracts key information from your PDF resume including skills, experience, and qualifications.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-briefcase"></i> Job Description Analysis</h4>
+                        <p>The AI parses essential requirements from the job posting to understand what employers are looking for.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-calculator"></i> Match Calculation</h4>
+                        <p>A detailed comparison generates a precise match percentage based on skills, experience, and requirements.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-chart-line"></i> Improvement Suggestions</h4>
+                        <p>Personalized recommendations to enhance your application and bridge identified gaps.</p>
+                    </div>
+                </div>
+                <p style="color: var(--text-muted); margin-top: 1.5rem; text-align: center; font-style: italic;">
+                    All processing is done with deterministic settings to ensure consistent, reliable results.
+                </p>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-bar"></i> Example Analysis
+                </h2>
+                <div class="example-box">
+                    <div class="match-score">Match Score: 78%</div>
+                    
+                    <h3 style="color: var(--text-primary); margin: 1.5rem 0 1rem; font-family: 'JetBrains Mono', monospace;">
+                        <i class="fas fa-check-circle" style="color: #2ecc71;"></i> Key Matching Points:
+                    </h3>
+                    <ul style="color: var(--text-muted); margin-left: 1.5rem; line-height: 1.8;">
+                        <li>5 years of Python development experience (Requirement: 3+ years)</li>
+                        <li>Strong background in data science and machine learning</li>
+                        <li>Experience with cloud deployment on AWS</li>
+                        <li>Project management and team leadership experience</li>
+                    </ul>
+
+                    <h3 style="color: var(--text-primary); margin: 1.5rem 0 1rem; font-family: 'JetBrains Mono', monospace;">
+                        <i class="fas fa-exclamation-triangle" style="color: #f39c12;"></i> Areas for Improvement:
+                    </h3>
+                    <ul style="color: var(--text-muted); margin-left: 1.5rem; line-height: 1.8;">
+                        <li>Missing experience with Kubernetes (mentioned as preferred)</li>
+                        <li>Consider highlighting database optimization skills more prominently</li>
+                        <li>Add examples of CI/CD implementation in previous roles</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-sliders-h"></i> Configuration
+                </h2>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                    The application uses Groq's Llama 3.3 70B model by default. The key parameters are:
+                </p>
+                <div class="config-grid">
+                    <div class="config-item">
+                        <h4>temperature: 0</h4>
+                        <p>For deterministic outputs and consistent results</p>
+                    </div>
+                    <div class="config-item">
+                        <h4>seed: 42</h4>
+                        <p>For reproducible analysis across sessions</p>
+                    </div>
+                    <div class="config-item">
+                        <h4>max_tokens: 2048</h4>
+                        <p>For comprehensive and detailed responses</p>
+                    </div>
+                    <div class="config-item">
+                        <h4>model: llama-3.3-70b</h4>
+                        <p>Groq's most advanced language model</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-scroll"></i> License
+                </h2>
+                <div class="feature-card">
+                    <h4><i class="fas fa-balance-scale"></i> MIT License</h4>
+                    <p>This project is licensed under the MIT License - see the LICENSE file for details. Free to use, modify, and distribute.</p>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-heart"></i> Acknowledgements
+                </h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h4><i class="fas fa-stream"></i> Streamlit</h4>
+                        <p>For the intuitive UI framework that makes data apps beautiful</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-robot"></i> Groq</h4>
+                        <p>For the powerful AI API and lightning-fast inference</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-file-pdf"></i> PyPDF2</h4>
+                        <p>For reliable PDF processing capabilities</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-users"></i> Open Source Community</h4>
+                        <p>For the amazing tools and libraries that make this possible</p>
+                    </div>
+                </div>
+
+                <div class="author-section">
+                    <div class="author-name">Made with <span class="tag-heart">❤️</span> by Lakshya Tripathi</div>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem; font-size: 0.9rem;">Happy job hunting!</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+
+            // Update theme toggle icon
+            const updateThemeIcon = () => {
+                const theme = document.documentElement.getAttribute('data-theme');
+                const icon = themeToggle.querySelector('i');
+                icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            };
+
+            updateThemeIcon();
+
+            themeToggle.addEventListener('click', () => {
+                const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon();
+            });
+        });
+    </script>
+</body>
+</html>

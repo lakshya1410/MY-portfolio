@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gmail MCP Server - Lakshya Tripathi</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --text-primary: #e94560;
+            --text-secondary: #f5f5f5;
+            --text-muted: #a0a0a0;
+            --accent: #0f3460;
+            --accent-bright: #e94560;
+            --accent-secondary: #f39c12;
+            --border: #2c2c54;
+            --card-bg: #16213e;
+            --shadow: rgba(233, 69, 96, 0.2);
+            --gradient: linear-gradient(135deg, #e94560, #f39c12);
+            --gradient-2: linear-gradient(135deg, #0f3460, #e94560);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e9ecef;
+            --text-primary: #2c2c54;
+            --text-secondary: #343a40;
+            --text-muted: #6c757d;
+            --accent: #e94560;
+            --accent-bright: #0f3460;
+            --accent-secondary: #f39c12;
+            --border: #dee2e6;
+            --card-bg: #ffffff;
+            --shadow: rgba(44, 44, 84, 0.1);
+            --gradient: linear-gradient(135deg, #e94560, #f39c12);
+            --gradient-2: linear-gradient(135deg, #0f3460, #e94560);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-bright);
+            border-radius: 3px;
+        }
+
+        .container {
+            max-width: 1200px; margin: 0 auto; padding: 0 2rem;
+        }
+
+        /* Header */
+        header {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(15, 15, 35, 0.95); backdrop-filter: blur(20px);
+            z-index: 1000; border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        
+        nav { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 1rem 0; height: 70px; 
+        }
+        
+        .logo { 
+            font-weight: 800; font-size: 1.5rem; color: var(--text-primary); 
+            text-decoration: none; font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a {
+            color: var(--text-secondary); text-decoration: none; font-weight: 500;
+            font-size: 0.9rem; position: relative; transition: all 0.3s ease;
+            padding: 0.5rem 1rem; border-radius: 20px;
+        }
+        .nav-links a:hover { 
+            color: var(--text-primary); background: var(--accent);
+        }
+
+        .nav-right { display: flex; align-items: center; gap: 1rem; }
+        
+        .theme-toggle {
+            background: var(--card-bg); border: none; color: var(--text-muted);
+            font-size: 1rem; cursor: pointer; padding: 0.5rem; border-radius: 50%;
+            width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover { color: var(--text-primary); }
+
+        .back-btn {
+            background: var(--card-bg); border: 1px solid var(--border); color: var(--text-secondary);
+            padding: 0.5rem 1rem; border-radius: 25px; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            transition: all 0.3s ease; font-weight: 500;
+        }
+        .back-btn:hover { border-color: var(--accent-bright); color: var(--text-primary); }
+
+        /* Main Content */
+        main { margin-top: 70px; padding: 4rem 0; }
+
+        .project-hero {
+            text-align: center; margin-bottom: 4rem;
+        }
+
+        .project-title {
+            font-size: 3rem; font-weight: 800; margin-bottom: 1rem;
+            background: var(--gradient); -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; background-clip: text;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .project-subtitle {
+            font-size: 1.2rem; color: var(--text-muted); max-width: 800px;
+            margin: 0 auto 2rem; line-height: 1.6;
+        }
+
+        .project-badges {
+            display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .badge {
+            background: var(--card-bg); color: var(--text-primary); padding: 0.5rem 1rem;
+            border-radius: 20px; font-size: 0.9rem; font-weight: 600;
+            border: 1px solid var(--border);
+        }
+
+        .project-links {
+            display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem; border: none; border-radius: 25px; font-weight: 600;
+            text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
+            transition: all 0.3s ease; font-size: 0.9rem; cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--gradient); color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px var(--shadow); }
+
+        .btn-secondary {
+            background: transparent; color: var(--text-secondary); border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { background: var(--card-bg); border-color: var(--accent-bright); }
+
+        /* Content Sections */
+        .content-section {
+            background: var(--card-bg); border-radius: 20px; padding: 2rem;
+            border: 1px solid var(--border); margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem;
+            color: var(--text-primary); font-family: 'JetBrains Mono', monospace;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+
+        .features-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem; margin-top: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-primary); padding: 1.5rem; border-radius: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .feature-card h4 {
+            color: var(--text-primary); margin-bottom: 0.5rem; font-weight: 600;
+        }
+
+        .feature-card p {
+            color: var(--text-muted); font-size: 0.9rem;
+        }
+
+        .setup-steps {
+            counter-reset: step-counter;
+        }
+
+        .setup-step {
+            background: var(--bg-primary); padding: 1.5rem; border-radius: 15px;
+            border: 1px solid var(--border); margin-bottom: 1.5rem;
+            counter-increment: step-counter;
+            position: relative;
+        }
+
+        .setup-step::before {
+            content: counter(step-counter);
+            position: absolute; top: -10px; left: 20px;
+            background: var(--gradient); color: white; border-radius: 50%;
+            width: 30px; height: 30px; display: flex; align-items: center;
+            justify-content: center; font-weight: bold; font-size: 0.9rem;
+        }
+
+        .setup-step h4 {
+            color: var(--text-primary); margin-bottom: 1rem; margin-top: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .code-block {
+            background: var(--bg-secondary); padding: 1rem; border-radius: 10px;
+            border: 1px solid var(--border); margin: 1rem 0;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
+            color: var(--text-secondary); overflow-x: auto;
+        }
+
+        .file-structure {
+            background: var(--bg-primary); padding: 1rem; border-radius: 10px;
+            border: 1px solid var(--border); font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem; color: var(--text-secondary);
+        }
+
+        .category-tags {
+            display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;
+        }
+
+        .category-tag {
+            padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;
+            font-weight: 500; display: flex; align-items: center; gap: 0.3rem;
+        }
+
+        .category-important { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+        .category-deletable { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .category-ignorable { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+
+        .author-section {
+            text-align: center; padding-top: 2rem; border-top: 1px solid var(--border);
+        }
+
+        .author-name {
+            font-size: 1.2rem; font-weight: 600; color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .project-title { font-size: 2rem; }
+            .container { padding: 0 1rem; }
+            .setup-step { padding-left: 2rem; }
+            .features-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="../index.html" class="logo">lakshy.</a>
+            <div class="nav-links">
+                <a href="../index.html#home">Home</a>
+                <a href="../index.html#about">About</a>
+                <a href="../index.html#skills">Skills</a>
+                <a href="../index.html#projects">Projects</a>
+                <a href="../index.html#contact">Contact</a>
+            </div>
+            <div class="nav-right">
+                <a href="../index.html#projects" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Projects
+                </a>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="project-hero">
+                <h1 class="project-title">Gmail MCP Server 📧</h1>
+                <p class="project-subtitle">
+                    A Model Context Protocol (MCP) server that connects to Gmail API to fetch, analyze, and categorize emails automatically. 
+                    This server helps you quickly identify important emails, ignore routine messages, and spot deletable promotional content.
+                </p>
+                <div class="project-badges">
+                    <span class="badge">Python</span>
+                    <span class="badge">Gmail API</span>
+                    <span class="badge">MCP</span>
+                    <span class="badge">OAuth2</span>
+                    <span class="badge">AI Analysis</span>
+                </div>
+                <div class="project-links">
+                    <a href="#" class="btn btn-primary">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                    <a href="#" class="btn btn-secondary">
+                        <i class="fas fa-external-link-alt"></i> Live Demo
+                    </a>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-star"></i> Features
+                </h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h4><i class="fas fa-shield-alt"></i> Gmail Integration</h4>
+                        <p>Secure OAuth2 authentication with Gmail API for safe access to your emails.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-brain"></i> Smart Email Analysis</h4>
+                        <p>Automatically categorizes emails using intelligent keyword analysis and patterns.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-download"></i> Flexible Fetching</h4>
+                        <p>Get unread emails or recent messages with customizable parameters.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-plug"></i> MCP Compatible</h4>
+                        <p>Works seamlessly with Claude Desktop and other MCP clients.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-tags"></i> Email Categories
+                </h2>
+                <p>The system automatically categorizes emails into three main types:</p>
+                <div class="category-tags">
+                    <span class="category-tag category-important">
+                        🔴 Important: Urgent emails requiring attention
+                    </span>
+                    <span class="category-tag category-ignorable">
+                        🟡 Ignorable: Regular emails that can wait
+                    </span>
+                    <span class="category-tag category-deletable">
+                        🟢 Deletable: Promotional/spam emails safe to delete
+                    </span>
+                </div>
+
+                <h3 style="color: var(--text-primary); margin: 2rem 0 1rem; font-family: 'JetBrains Mono', monospace;">
+                    📧 Categorization Logic
+                </h3>
+                
+                <div class="feature-card" style="margin-bottom: 1rem;">
+                    <h4>Important Emails contain keywords like:</h4>
+                    <p>urgent, asap, important, critical, deadline, meeting, schedule, follow up, action required, boss, manager, client, customer</p>
+                </div>
+
+                <div class="feature-card" style="margin-bottom: 1rem;">
+                    <h4>Deletable Emails contain keywords like:</h4>
+                    <p>unsubscribe, newsletter, promotion, deal, sale, discount, marketing, advertisement</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4>Ignorable Emails</h4>
+                    <p>Everything else that doesn't fall into the above categories.</p>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-rocket"></i> Setup
+                </h2>
+                <div class="setup-steps">
+                    <div class="setup-step">
+                        <h4>Prerequisites</h4>
+                        <ul style="margin-left: 1rem; color: var(--text-muted);">
+                            <li>Python 3.12+</li>
+                            <li>Google Cloud Console project with Gmail API enabled</li>
+                            <li>Gmail account</li>
+                        </ul>
+                    </div>
+
+                    <div class="setup-step">
+                        <h4>Google Cloud Setup</h4>
+                        <ol style="margin-left: 1rem; color: var(--text-muted);">
+                            <li>Go to Google Cloud Console</li>
+                            <li>Create a new project or select existing one</li>
+                            <li>Enable the Gmail API</li>
+                            <li>Create OAuth 2.0 credentials (Desktop Application)</li>
+                            <li>Download the credentials as <code>credentials.json</code></li>
+                        </ol>
+                    </div>
+
+                    <div class="setup-step">
+                        <h4>Installation</h4>
+                        <div class="code-block">
+# Clone or download the server files
+# Ensure credentials.json is in the project directory
+
+# Install dependencies
+pip install google>=3.0.0 google-api-python-client>=2.170.0 google-auth>=2.40.2 google-auth-oauthlib>=1.2.2 mcp>=1.9.1
+
+# or with uv:
+uv add google>=3.0.0 google-api-python-client>=2.170.0 google-auth>=2.40.2 google-auth-oauthlib>=1.2.2 mcp>=1.9.1
+                        </div>
+                    </div>
+
+                    <div class="setup-step">
+                        <h4>Test Authentication</h4>
+                        <div class="code-block">
+python gmail_auth_test.py
+                        </div>
+                        <p style="color: var(--text-muted); margin-top: 0.5rem;">
+                            This will open your browser for Gmail OAuth approval and save authentication tokens.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-laptop-code"></i> Usage
+                </h2>
+                
+                <h3 style="color: var(--text-primary); margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace;">
+                    Add to Claude Desktop
+                </h3>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                    Add the following to your Claude Desktop configuration file:
+                </p>
+                <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 0.9rem;">
+                    <strong>Windows:</strong> %APPDATA%\Claude\claude_desktop_config.json<br>
+                    <strong>Mac:</strong> ~/Library/Application Support/Claude/claude_desktop_config.json
+                </p>
+
+                <div class="code-block">
+{
+  "mcpServers": {
+    "gmail-analyzer": {
+      "command": "python",
+      "args": ["path/to/your/main.py"],
+      "env": {}
+    }
+  }
+}
+                </div>
+
+                <h3 style="color: var(--text-primary); margin: 2rem 0 1rem; font-family: 'JetBrains Mono', monospace;">
+                    Available Tools
+                </h3>
+                
+                <div class="feature-card" style="margin-bottom: 1rem;">
+                    <h4>test_connection</h4>
+                    <p>Test if the MCP server is working correctly.</p>
+                </div>
+
+                <div class="feature-card" style="margin-bottom: 1rem;">
+                    <h4>fetch_and_analyze_gmail</h4>
+                    <p>Fetch emails from Gmail and analyze them automatically.</p>
+                    <ul style="margin-top: 0.5rem; margin-left: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+                        <li><code>max_emails</code> (int): Maximum emails to fetch (default: 5)</li>
+                        <li><code>unread_only</code> (bool): Only fetch unread emails (default: true)</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h4>analyze_emails</h4>
+                    <p>Analyze provided email content and categorize them.</p>
+                    <ul style="margin-top: 0.5rem; margin-left: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+                        <li><code>emails</code> (array): List of email contents to analyze</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-folder-tree"></i> File Structure
+                </h2>
+                <div class="file-structure">
+├── main.py                 # MCP server implementation
+├── gmail_analyzer.py       # Standalone email analyzer
+├── gmail_auth_test.py      # Authentication testing script
+├── credentials.json        # Google OAuth credentials (you provide)
+├── token.json             # Generated authentication tokens
+├── pyproject.toml         # Project dependencies
+└── README.md              # Documentation
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-shield-alt"></i> Security & Privacy
+                </h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h4><i class="fas fa-key"></i> OAuth2 Authentication</h4>
+                        <p>Uses secure OAuth2 for Gmail authentication</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-eye"></i> Read-Only Access</h4>
+                        <p>Only requests read-only access to Gmail (gmail.readonly scope)</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-hdd"></i> Local Storage</h4>
+                        <p>Credentials are stored locally in token.json</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-user-shield"></i> Privacy First</h4>
+                        <p>No email content is stored permanently or sent to external services</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-wrench"></i> Troubleshooting
+                </h2>
+                
+                <div class="feature-card" style="margin-bottom: 1rem;">
+                    <h4>"Credentials file not found"</h4>
+                    <p>Ensure credentials.json is in the same directory as the Python files</p>
+                </div>
+
+                <div class="feature-card" style="margin-bottom: 1rem;">
+                    <h4>"Authentication failed"</h4>
+                    <p>Run <code>python gmail_auth_test.py</code> to reset authentication. Check that Gmail API is enabled in Google Cloud Console</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4>"No emails found"</h4>
+                    <p>Try setting <code>unread_only: false</code> to fetch recent emails instead. Check your Gmail account has emails</p>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-cube"></i> Dependencies
+                </h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h4>google-api-python-client</h4>
+                        <p>Gmail API client for Python integration</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>google-auth</h4>
+                        <p>Google authentication library</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>google-auth-oauthlib</h4>
+                        <p>OAuth2 flow implementation</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>mcp</h4>
+                        <p>Model Context Protocol framework</p>
+                    </div>
+                </div>
+
+                <div class="author-section">
+                    <div class="author-name">Made with <span class="tag-heart">❤️</span> by Lakshya Tripathi</div>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem; font-size: 0.9rem;">Happy job hunting!</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+
+            // Update theme toggle icon
+            const updateThemeIcon = () => {
+                const theme = document.documentElement.getAttribute('data-theme');
+                const icon = themeToggle.querySelector('i');
+                icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            };
+
+            updateThemeIcon();
+
+            themeToggle.addEventListener('click', () => {
+                const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon();
+            });
+        });
+    </script>
+</body>
+</html>

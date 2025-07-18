@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lotus Mind - Lakshya Tripathi</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --text-primary: #e94560;
+            --text-secondary: #f5f5f5;
+            --text-muted: #a0a0a0;
+            --accent: #0f3460;
+            --accent-bright: #e94560;
+            --accent-secondary: #f39c12;
+            --border: #2c2c54;
+            --card-bg: #16213e;
+            --shadow: rgba(233, 69, 96, 0.2);
+            --gradient: linear-gradient(135deg, #e94560, #f39c12);
+            --gradient-2: linear-gradient(135deg, #0f3460, #e94560);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e9ecef;
+            --text-primary: #2c2c54;
+            --text-secondary: #343a40;
+            --text-muted: #6c757d;
+            --accent: #e94560;
+            --accent-bright: #0f3460;
+            --accent-secondary: #f39c12;
+            --border: #dee2e6;
+            --card-bg: #ffffff;
+            --shadow: rgba(44, 44, 84, 0.1);
+            --gradient: linear-gradient(135deg, #e94560, #f39c12);
+            --gradient-2: linear-gradient(135deg, #0f3460, #e94560);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-bright);
+            border-radius: 3px;
+        }
+
+        .container {
+            max-width: 1200px; margin: 0 auto; padding: 0 2rem;
+        }
+
+        /* Header */
+        header {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(15, 15, 35, 0.95); backdrop-filter: blur(20px);
+            z-index: 1000; border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        
+        nav { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 1rem 0; height: 70px; 
+        }
+        
+        .logo { 
+            font-weight: 800; font-size: 1.5rem; color: var(--text-primary); 
+            text-decoration: none; font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a {
+            color: var(--text-secondary); text-decoration: none; font-weight: 500;
+            font-size: 0.9rem; position: relative; transition: all 0.3s ease;
+            padding: 0.5rem 1rem; border-radius: 20px;
+        }
+        .nav-links a:hover { 
+            color: var(--text-primary); background: var(--accent);
+        }
+
+        .nav-right { display: flex; align-items: center; gap: 1rem; }
+        
+        .theme-toggle {
+            background: var(--card-bg); border: none; color: var(--text-muted);
+            font-size: 1rem; cursor: pointer; padding: 0.5rem; border-radius: 50%;
+            width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover { color: var(--text-primary); }
+
+        .back-btn {
+            background: var(--card-bg); border: 1px solid var(--border); color: var(--text-secondary);
+            padding: 0.5rem 1rem; border-radius: 25px; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            transition: all 0.3s ease; font-weight: 500;
+        }
+        .back-btn:hover { border-color: var(--accent-bright); color: var(--text-primary); }
+
+        /* Main Content */
+        main { margin-top: 70px; padding: 4rem 0; }
+
+        .project-hero {
+            text-align: center; margin-bottom: 4rem;
+        }
+
+        .project-title {
+            font-size: 3rem; font-weight: 800; margin-bottom: 1rem;
+            background: var(--gradient); -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; background-clip: text;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .project-subtitle {
+            font-size: 1.2rem; color: var(--text-muted); max-width: 800px;
+            margin: 0 auto 2rem; line-height: 1.6;
+        }
+
+        .project-badges {
+            display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .badge {
+            background: var(--card-bg); color: var(--text-primary); padding: 0.5rem 1rem;
+            border-radius: 20px; font-size: 0.9rem; font-weight: 600;
+            border: 1px solid var(--border);
+        }
+
+        .project-links {
+            display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem; border: none; border-radius: 25px; font-weight: 600;
+            text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
+            transition: all 0.3s ease; font-size: 0.9rem; cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--gradient); color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px var(--shadow); }
+
+        .btn-secondary {
+            background: transparent; color: var(--text-secondary); border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { background: var(--card-bg); border-color: var(--accent-bright); }
+
+        /* Content Sections */
+        .content-section {
+            background: var(--card-bg); border-radius: 20px; padding: 2rem;
+            border: 1px solid var(--border); margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem;
+            color: var(--text-primary); font-family: 'JetBrains Mono', monospace;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+
+        .features-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem; margin-top: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-primary); padding: 1.5rem; border-radius: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .feature-card h4 {
+            color: var(--text-primary); margin-bottom: 0.5rem; font-weight: 600;
+        }
+
+        .feature-card p {
+            color: var(--text-muted); font-size: 0.9rem;
+        }
+
+        .feature-highlight {
+            background: var(--bg-primary); padding: 2rem; border-radius: 15px;
+            border: 1px solid var(--border); margin-bottom: 1.5rem;
+        }
+
+        .feature-highlight h3 {
+            color: var(--text-primary); margin-bottom: 1rem; font-size: 1.3rem;
+            font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; gap: 0.5rem;
+        }
+
+        .feature-highlight ul {
+            list-style: none; padding: 0;
+        }
+
+        .feature-highlight li {
+            color: var(--text-muted); margin-bottom: 0.5rem; padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .feature-highlight li::before {
+            content: "•"; color: var(--accent-bright); font-weight: bold;
+            position: absolute; left: 0;
+        }
+
+        .setup-steps {
+            counter-reset: step-counter;
+        }
+
+        .setup-step {
+            background: var(--bg-primary); padding: 1.5rem; border-radius: 15px;
+            border: 1px solid var(--border); margin-bottom: 1.5rem;
+            counter-increment: step-counter;
+            position: relative;
+        }
+
+        .setup-step::before {
+            content: counter(step-counter);
+            position: absolute; top: -10px; left: 20px;
+            background: var(--gradient); color: white; border-radius: 50%;
+            width: 30px; height: 30px; display: flex; align-items: center;
+            justify-content: center; font-weight: bold; font-size: 0.9rem;
+        }
+
+        .setup-step h4 {
+            color: var(--text-primary); margin-bottom: 1rem; margin-top: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .code-block {
+            background: var(--bg-secondary); padding: 1rem; border-radius: 10px;
+            border: 1px solid var(--border); margin: 1rem 0;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
+            color: var(--text-secondary); overflow-x: auto;
+        }
+
+        .tech-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem; margin-top: 1rem;
+        }
+
+        .tech-item {
+            background: var(--bg-primary); padding: 1rem; border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .tech-item h4 {
+            color: var(--text-primary); margin-bottom: 0.5rem; font-size: 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .tech-item p {
+            color: var(--text-muted); font-size: 0.8rem;
+        }
+
+        .author-section {
+            text-align: center; padding-top: 2rem; border-top: 1px solid var(--border);
+        }
+
+        .author-name {
+            font-size: 1.2rem; font-weight: 600; color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .tag-heart {
+            color: var(--accent-bright); font-size: 1.1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .project-title { font-size: 2rem; }
+            .container { padding: 0 1rem; }
+            .setup-step { padding-left: 2rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .tech-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="../index.html" class="logo">lakshy.</a>
+            <div class="nav-links">
+                <a href="../index.html#home">Home</a>
+                <a href="../index.html#about">About</a>
+                <a href="../index.html#skills">Skills</a>
+                <a href="../index.html#projects">Projects</a>
+                <a href="../index.html#contact">Contact</a>
+            </div>
+            <div class="nav-right">
+                <a href="../index.html#projects" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Projects
+                </a>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="project-hero">
+                <h1 class="project-title">Lotus Mind 🌸🧠</h1>
+                <p class="project-subtitle">
+                    A mental wellness platform that provides tools to improve emotional well-being. 
+                    It includes an AI-powered assistant, mood tracking, journaling, and more, all integrated into an interactive web-based platform.
+                </p>
+                <div class="project-badges">
+                    <span class="badge">Python</span>
+                    <span class="badge">Streamlit</span>
+                    <span class="badge">Google Gemini API</span>
+                    <span class="badge">Mental Health</span>
+                    <span class="badge">Web Platform</span>
+                </div>
+                <div class="project-links">
+                    <a href="#" class="btn btn-primary">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                    <a href="#" class="btn btn-secondary">
+                        <i class="fas fa-external-link-alt"></i> Live Demo
+                    </a>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-rocket"></i> Features
+                </h2>
+                
+                <div class="feature-highlight">
+                    <h3><i class="fas fa-robot"></i> AI Assistant (lat.py) 🤖</h3>
+                    <ul>
+                        <li>Built with Python and Streamlit for a seamless user experience</li>
+                        <li>Utilizes the Gemini API for intelligent and contextual responses</li>
+                        <li>Provides mental health guidance and general conversation support</li>
+                        <li>Interactive chat interface for personalized assistance</li>
+                    </ul>
+                </div>
+
+                <div class="feature-highlight">
+                    <h3><i class="fas fa-pen-fancy"></i> Journal Writing (colornote.html) 📝</h3>
+                    <ul>
+                        <li>Digital journal to document thoughts and emotions safely</li>
+                        <li>User-friendly interface accessible from the web platform</li>
+                        <li>Secure and private space for personal reflection</li>
+                        <li>Easy-to-use writing tools and formatting options</li>
+                    </ul>
+                </div>
+
+                <div class="feature-highlight">
+                    <h3><i class="fas fa-theater-masks"></i> Mood Analysis (newmood.html) 🎭</h3>
+                    <ul>
+                        <li>Interactive mood quiz to determine current emotional state</li>
+                        <li>Animated UI with engaging and thoughtful questions</li>
+                        <li>Personalized insights based on mood assessment results</li>
+                        <li>Track emotional patterns over time</li>
+                    </ul>
+                </div>
+
+                <div class="feature-highlight">
+                    <h3><i class="fas fa-home"></i> Landing Page (main.html) 🌐</h3>
+                    <ul>
+                        <li>The main entry point for the entire wellness platform</li>
+                        <li>Showcases all available features in an intuitive layout</li>
+                        <li>Clean and calming design focused on mental wellness</li>
+                        <li>Easy navigation to all platform components</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-tools"></i> Installation & Setup
+                </h2>
+                
+                <div class="setup-steps">
+                    <div class="setup-step">
+                        <h4>Prerequisites</h4>
+                        <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                            Ensure you have Python installed on your system. You can download it from <a href="https://python.org" style="color: var(--accent-bright);">python.org</a>.
+                        </p>
+                    </div>
+
+                    <div class="setup-step">
+                        <h4>Clone the Repository</h4>
+                        <div class="code-block">
+git clone https://github.com/your-repo/lotus-mind.git
+cd lotus-mind
+                        </div>
+                    </div>
+
+                    <div class="setup-step">
+                        <h4>Install Dependencies</h4>
+                        <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                            Run the following command to install required libraries:
+                        </p>
+                        <div class="code-block">
+pip install -r requirements.txt
+                        </div>
+                    </div>
+
+                    <div class="setup-step">
+                        <h4>Run the Application</h4>
+                        <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                            For Windows users, you can run the application using the provided batch script:
+                        </p>
+                        <div class="code-block">
+run_lotus_mind.bat
+                        </div>
+                        <p style="color: var(--text-muted); margin: 1rem 0;">
+                            Alternatively, manually start the AI assistant using Streamlit:
+                        </p>
+                        <div class="code-block">
+streamlit run lat.py
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-cog"></i> Configuration
+                </h2>
+                <div class="feature-card">
+                    <h4><i class="fas fa-key"></i> Environment Variables</h4>
+                    <p>This project uses environment variables stored in <code>.env</code>. Ensure you set up your API keys and other credentials correctly for the Gemini API integration.</p>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-laptop-code"></i> Technologies Used
+                </h2>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <h4>Frontend</h4>
+                        <p>HTML, CSS, JavaScript for the web interface</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Backend</h4>
+                        <p>Python, Streamlit for the AI assistant</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>AI API</h4>
+                        <p>Google Gemini API for intelligent responses</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>Platform</h4>
+                        <p>Web-based platform with integrated components</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-heart"></i> Mental Wellness Focus
+                </h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h4><i class="fas fa-brain"></i> Emotional Support</h4>
+                        <p>AI-powered conversations designed to provide mental health guidance and emotional support.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-chart-line"></i> Mood Tracking</h4>
+                        <p>Interactive tools to help users understand and track their emotional patterns over time.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-journal-whills"></i> Reflective Journaling</h4>
+                        <p>Safe space for users to document their thoughts, feelings, and personal growth journey.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4><i class="fas fa-users"></i> Holistic Approach</h4>
+                        <p>Comprehensive platform combining multiple wellness tools in one accessible location.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-hands-helping"></i> Contributing
+                </h2>
+                <div class="feature-card">
+                    <h4><i class="fas fa-code-branch"></i> Open Source</h4>
+                    <p>Contributions are welcome! Feel free to fork the repository, create a new branch, and submit a pull request. Help us make mental wellness more accessible to everyone.</p>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-scroll"></i> License
+                </h2>
+                <div class="feature-card">
+                    <h4><i class="fas fa-balance-scale"></i> MIT License</h4>
+                    <p>This project is open-source and available under the MIT License. Free to use, modify, and distribute for both personal and commercial purposes.</p>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-envelope"></i> Contact
+                </h2>
+                <div class="feature-card">
+                    <h4><i class="fas fa-headset"></i> Support</h4>
+                    <p>For any queries or support regarding the Lotus Mind platform, reach out to <a href="mailto:tripathilakshya9@gmail.com" style="color: var(--accent-bright);">tripathilakshya9@gmail.com</a></p>
+                </div>
+
+                <div class="author-section">
+                    <div class="author-name">Made with <span class="tag-heart">❤️</span> by Lakshya Tripathi</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+
+            // Update theme toggle icon
+            const updateThemeIcon = () => {
+                const theme = document.documentElement.getAttribute('data-theme');
+                const icon = themeToggle.querySelector('i');
+                icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            };
+
+            updateThemeIcon();
+
+            themeToggle.addEventListener('click', () => {
+                const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon();
+            });
+        });
+    </script>
+</body>
+</html>

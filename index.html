@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lakshya Tripathi - Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --text-primary: #e94560;
+            --text-secondary: #f5f5f5;
+            --text-muted: #a0a0a0;
+            --accent: #0f3460;
+            --accent-bright: #e94560;
+            --accent-secondary: #f39c12;
+            --border: #2c2c54;
+            --card-bg: #16213e;
+            --shadow: rgba(233, 69, 96, 0.2);
+            --gradient: linear-gradient(135deg, #e94560, #f39c12);
+            --gradient-2: linear-gradient(135deg, #0f3460, #e94560);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e9ecef;
+            --text-primary: #2c2c54;
+            --text-secondary: #343a40;
+            --text-muted: #6c757d;
+            --accent: #e94560;
+            --accent-bright: #0f3460;
+            --accent-secondary: #f39c12;
+            --border: #dee2e6;
+            --card-bg: #ffffff;
+            --shadow: rgba(44, 44, 84, 0.1);
+            --gradient: linear-gradient(135deg, #e94560, #f39c12);
+            --gradient-2: linear-gradient(135deg, #0f3460, #e94560);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-bright);
+            border-radius: 3px;
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-primary);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999; transition: opacity 0.5s ease-out;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0; pointer-events: none;
+        }
+
+        .loading-text {
+            font-size: 2rem; font-weight: 600; color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .container {
+            max-width: 1200px; margin: 0 auto; padding: 0 2rem;
+        }
+
+        /* Header */
+        header {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(15, 15, 35, 0.95); backdrop-filter: blur(20px);
+            z-index: 1000; border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        
+        nav { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 1rem 0; height: 70px; 
+        }
+        
+        .logo { 
+            font-weight: 800; font-size: 1.5rem; color: var(--text-primary); 
+            text-decoration: none; font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a {
+            color: var(--text-secondary); text-decoration: none; font-weight: 500;
+            font-size: 0.9rem; position: relative; transition: all 0.3s ease;
+            padding: 0.5rem 1rem; border-radius: 20px;
+        }
+        .nav-links a:hover, .nav-links a.active { 
+            color: var(--text-primary); background: var(--accent);
+        }
+
+        .nav-right { display: flex; align-items: center; gap: 1rem; }
+        .social-links { display: flex; gap: 0.8rem; }
+        .social-links a {
+            color: var(--text-muted); font-size: 1.1rem; transition: all 0.3s ease;
+            width: 35px; height: 35px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; background: var(--card-bg);
+        }
+        .social-links a:hover { color: var(--text-primary); transform: translateY(-2px); }
+        
+        .theme-toggle {
+            background: var(--card-bg); border: none; color: var(--text-muted);
+            font-size: 1rem; cursor: pointer; padding: 0.5rem; border-radius: 50%;
+            width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover { color: var(--text-primary); }
+
+        /* Main Content */
+        main { margin-top: 70px; }
+        .section { padding: 4rem 0; position: relative; }
+        
+        .section-title {
+            font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; text-align: center;
+            background: var(--gradient); -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; background-clip: text;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .section-subtitle {
+            text-align: center; color: var(--text-muted); margin-bottom: 3rem;
+            font-size: 1.1rem; max-width: 600px; margin-left: auto; margin-right: auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            position: relative; text-align: center;
+        }
+
+        .hero-content { position: relative; z-index: 1; }
+        
+        .hero-badge {
+            display: inline-block; padding: 0.5rem 1.5rem; background: var(--card-bg);
+            border: 1px solid var(--border); border-radius: 25px; color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 4rem; font-weight: 800; margin-bottom: 1.5rem;
+            background: var(--gradient); -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; background-clip: text;
+            line-height: 1.1; min-height: 4.8rem;
+        }
+
+        /* Typing Animation */
+        .typing-container {
+            position: relative;
+        }
+
+        .typing-text {
+            font-size: 4rem; font-weight: 800;
+            background: var(--gradient); -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; background-clip: text;
+            line-height: 1.1;
+        }
+
+        .cursor {
+            display: inline-block;
+            background: var(--text-primary);
+            width: 3px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem; color: var(--text-muted); margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .hero-cta {
+            display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem; border: none; border-radius: 25px; font-weight: 600;
+            text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
+            transition: all 0.3s ease; font-size: 0.9rem; cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--gradient); color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px var(--shadow); }
+
+        .btn-secondary {
+            background: transparent; color: var(--text-secondary); border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { background: var(--card-bg); border-color: var(--accent-bright); }
+
+        /* About Section */
+        .about-content {
+            max-width: 800px; margin: 0 auto; text-align: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .about-highlight {
+            background: var(--card-bg); padding: 1.5rem; border-radius: 15px;
+            border: 1px solid var(--border); margin-top: 2rem;
+        }
+
+        .about-highlight p {
+            font-style: italic; color: var(--text-primary); font-weight: 500;
+            font-size: 1rem;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem; max-width: 1000px; margin: 0 auto;
+        }
+
+        .skill-category {
+            background: var(--card-bg); padding: 2rem; border-radius: 20px;
+            border: 1px solid var(--border); text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-5px); border-color: var(--accent-bright);
+            box-shadow: 0 15px 40px var(--shadow);
+        }
+
+        .skill-icon {
+            width: 60px; height: 60px; background: var(--gradient);
+            border-radius: 15px; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.5rem; font-size: 1.5rem; color: white;
+        }
+
+        .skill-category h3 {
+            color: var(--text-primary); font-size: 1.3rem; margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .skill-list {
+            display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;
+        }
+
+        .skill-tag {
+            background: var(--accent); color: white; padding: 0.3rem 0.8rem;
+            border-radius: 15px; font-size: 0.8rem; font-weight: 500;
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem; max-width: 1200px; margin: 0 auto;
+        }
+
+        .project-card {
+            background: var(--card-bg); border-radius: 20px; overflow: hidden;
+            border: 1px solid var(--border); transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px); border-color: var(--accent-bright);
+            box-shadow: 0 20px 50px var(--shadow);
+        }
+
+        .project-header {
+            padding: 1.5rem; border-bottom: 1px solid var(--border);
+        }
+
+        .project-title {
+            font-size: 1.2rem; font-weight: 700; color: var(--text-primary);
+            margin-bottom: 0.5rem; font-family: 'JetBrains Mono', monospace;
+        }
+
+        .project-links {
+            display: flex; gap: 0.5rem;
+        }
+
+        .project-links a {
+            width: 30px; height: 30px; background: var(--accent);
+            border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            color: white; text-decoration: none; font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .project-links a:hover { background: var(--accent-bright); }
+
+        .project-body {
+            padding: 1.5rem;
+        }
+
+        .project-description {
+            color: var(--text-muted); line-height: 1.6; font-size: 0.9rem;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+            max-width: 1000px; margin: 0 auto;
+        }
+
+        .contact-info {
+            background: var(--card-bg); padding: 2rem; border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .contact-item {
+            display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
+            padding: 1rem; background: var(--bg-primary); border-radius: 10px;
+        }
+
+        .contact-item i {
+            color: var(--text-primary); width: 20px; text-align: center;
+        }
+
+        .contact-form {
+            background: var(--card-bg); padding: 2rem; border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block; margin-bottom: 0.5rem; color: var(--text-primary);
+            font-weight: 500; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 1rem; border: 1px solid var(--border);
+            border-radius: 10px; background: var(--bg-primary); color: var(--text-secondary);
+            font-family: inherit; transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--accent-bright);
+        }
+
+        .form-group textarea { resize: vertical; min-height: 120px; }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary); padding: 2rem 0;
+            border-top: 1px solid var(--border); text-align: center;
+        }
+
+        /* Mobile Navigation */
+        .menu-toggle { display: none; }
+        .mobile-nav { 
+            position: fixed; top: 0; right: 0; width: 300px; height: 100vh;
+            background: var(--bg-secondary); z-index: 2000; padding: 2rem;
+            transform: translateX(100%); transition: transform 0.3s ease;
+            border-left: 1px solid var(--border);
+            display: none; flex-direction: column;
+        }
+        
+        .mobile-nav.active { transform: translateX(0); }
+        
+        .mobile-nav-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);
+        }
+        
+        .mobile-logo {
+            font-weight: 800; font-size: 1.3rem; color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .close-menu {
+            background: var(--card-bg); border: none; color: var(--text-muted);
+            font-size: 1.2rem; cursor: pointer; padding: 0.5rem; border-radius: 8px;
+            width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;
+        }
+        
+        .mobile-nav-links {
+            display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;
+        }
+        
+        .mobile-nav-links a {
+            color: var(--text-secondary); text-decoration: none; font-weight: 500;
+            font-size: 1.1rem; padding: 0.8rem 1rem; border-radius: 10px;
+            transition: all 0.3s ease; display: flex; align-items: center; gap: 0.8rem;
+        }
+        
+        .mobile-nav-links a:hover, .mobile-nav-links a.active {
+            color: var(--text-primary); background: var(--accent);
+        }
+        
+        .mobile-social-section {
+            margin-top: auto;
+        }
+        
+        .mobile-social-title {
+            color: var(--text-primary); font-size: 1rem; margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace; font-weight: 600;
+        }
+        
+        .mobile-social-links {
+            display: flex; gap: 1rem; margin-bottom: 1.5rem;
+        }
+        
+        .mobile-social-links a {
+            color: var(--text-muted); font-size: 1.2rem; transition: all 0.3s ease;
+            width: 40px; height: 40px; border-radius: 10px; display: flex;
+            align-items: center; justify-content: center; background: var(--card-bg);
+        }
+        
+        .mobile-social-links a:hover { color: var(--text-primary); }
+        
+        .mobile-theme-toggle {
+            background: var(--card-bg); border: 1px solid var(--border); color: var(--text-secondary);
+            padding: 0.8rem; border-radius: 10px; cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; gap: 0.8rem; font-weight: 500;
+        }
+        
+        .mobile-theme-toggle:hover { border-color: var(--accent-bright); }
+
+        /* Overlay for mobile menu */
+        .mobile-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); z-index: 1500; opacity: 0;
+            visibility: hidden; transition: all 0.3s ease;
+        }
+        
+        .mobile-overlay.active { opacity: 1; visibility: visible; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links, .nav-right .social-links { display: none; }
+            .menu-toggle {
+                display: block; background: var(--card-bg); border: none; color: var(--text-muted);
+                font-size: 1.2rem; cursor: pointer; padding: 0.5rem; border-radius: 8px;
+            }
+            
+            .mobile-nav { display: flex; }
+            
+            .hero h1, .typing-text { font-size: 2.5rem; }
+            .section-title { font-size: 2rem; }
+            .contact-content { grid-template-columns: 1fr; gap: 2rem; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .skills-grid { grid-template-columns: 1fr; }
+            .hero-cta { flex-direction: column; align-items: center; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1, .typing-text { font-size: 2rem; }
+            .section { padding: 3rem 0; }
+            .container { padding: 0 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-text">&lt;/This is lakshy&gt;</div>
+    </div>
+    
+    <header>
+        <nav class="container">
+            <a href="#home" class="logo">lakshy.</a>
+            <div class="nav-links">
+                <a href="#home" class="active">Home</a>
+                <a href="#about">About</a>
+                <a href="#skills">Skills</a>
+                <a href="#projects">Projects</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="nav-right">
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/lakshyatripathi1410/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://x.com/is_lakshy" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://github.com/lakshya1410" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://leetcode.com/u/lakshytripathi/" target="_blank"><i class="fas fa-code"></i></a>
+                </div>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+        </nav>
+    </header>
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    
+    <!-- Mobile Sidebar Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-header">
+            <div class="mobile-logo">lakshy.</div>
+            <button class="close-menu" id="closeMenu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="mobile-nav-links">
+            <a href="#home" class="active">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="#about">
+                <i class="fas fa-user"></i> About
+            </a>
+            <a href="#skills">
+                <i class="fas fa-cog"></i> Skills
+            </a>
+            <a href="#projects">
+                <i class="fas fa-code"></i> Projects
+            </a>
+            <a href="#contact">
+                <i class="fas fa-envelope"></i> Contact
+            </a>
+        </div>
+        
+        <div class="mobile-social-section">
+            <div class="mobile-social-title">Connect With Me</div>
+            <div class="mobile-social-links">
+                <a href="https://www.linkedin.com/in/lakshyatripathi1410/" target="_blank">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://x.com/is_lakshy" target="_blank">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://github.com/lakshya1410" target="_blank">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://leetcode.com/u/lakshytripathi/" target="_blank">
+                    <i class="fas fa-code"></i>
+                </a>
+            </div>
+            
+            <button class="mobile-theme-toggle" id="mobileThemeToggle">
+                <i class="fas fa-moon"></i>
+                <span>Toggle Theme</span>
+            </button>
+        </div>
+    </div>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <div class="hero-badge">👋 Welcome to my portfolio</div>
+                <div class="typing-container">
+                    <h1 id="typingText" class="typing-text">Lakshya Tripathi</h1>
+                </div>
+                <p class="hero-subtitle">CS-AI Engineer & Machine Learning Enthusiast</p>
+                <div class="hero-cta">
+                    <a href="#projects" class="btn btn-primary">
+                        View My Work <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="#contact" class="btn btn-secondary">
+                        Get In Touch <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <div class="container">
+                <h2 class="section-title">About Me</h2>
+                <p class="section-subtitle">Building AI solutions that matter</p>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Passionate Computer Science and AI student skilled in Java and DSA, with growing expertise in Machine Learning and Generative AI. I love creating innovative AI-powered products that solve real-world problems and make a difference.</p>
+                    </div>
+                    <div class="about-highlight">
+                        <p>Open for freelance work — I can vibe code your sites and get things done anyhow.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="section">
+            <div class="container">
+                <h2 class="section-title">Skills</h2>
+                <p class="section-subtitle">Technologies I work with</p>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <div class="skill-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>Languages</h3>
+                        <div class="skill-list">
+                            <span class="skill-tag">Java</span>
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">JavaScript</span>
+                            <span class="skill-tag">HTML/CSS</span>
+                            <span class="skill-tag">SQL</span>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <div class="skill-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3>Libraries</h3>
+                        <div class="skill-list">
+                            <span class="skill-tag">Streamlit</span>
+                            <span class="skill-tag">Pandas</span>
+                            <span class="skill-tag">NumPy</span>
+                            <span class="skill-tag">Scikit-learn</span>
+                            <span class="skill-tag">TensorFlow</span>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <div class="skill-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h3>Tech Skills</h3>
+                        <div class="skill-list">
+                            <span class="skill-tag">Machine Learning</span>
+                            <span class="skill-tag">Generative AI</span>
+                            <span class="skill-tag">Git</span>
+                            <span class="skill-tag">APIs</span>
+                            <span class="skill-tag">DSA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section">
+            <div class="container">
+                <h2 class="section-title">Stuff I Made</h2>
+                <p class="section-subtitle">Some projects I've worked on recently</p>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3 class="project-title">Gmail MCP Server</h3>
+                            <div class="project-links">
+                                <a href="Projects/gmail-mcp-project.html" title="View Details"><i class="fas fa-info-circle"></i></a>
+                                <a href="https://github.com/lakshya1410/Gmail-MCP-Server" target="_blank"><i class="fab fa-github"></i></a>
+                            </div>
+                        </div>
+                        <div class="project-body">
+                            <p class="project-description">
+                                An intelligent server that automatically categorizes Gmail emails using smart analysis. Integrates with Claude Desktop via OAuth2 to help users quickly identify urgent emails and filter promotional content.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3 class="project-title">JDmatcher</h3>
+                            <div class="project-links">
+                                <a href="Projects/jdmatcher-project.html" title="View Details"><i class="fas fa-info-circle"></i></a>
+                                <a href="https://github.com/lakshya1410/JDmatcher" target="_blank"><i class="fab fa-github"></i></a>
+                            </div>
+                        </div>
+                        <div class="project-body">
+                            <p class="project-description">
+                                An AI-powered tool that analyzes your resume against job descriptions using Groq's Llama 3.3 70B model to provide precise match scores, identify skills gaps, and offer personalized recommendations.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3 class="project-title">WebChic</h3>
+                            <div class="project-links">
+                                <a href="Projects/webchic-project.html" title="View Details"><i class="fas fa-info-circle"></i></a>
+                                <a href="https://webchic-lakshy.streamlit.app/" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                        <div class="project-body">
+                            <p class="project-description">
+                                Your AI Fashion Advisor. WebChic is an AI-powered fashion advisor that provides personalized outfit analysis and recommendations. Built with Streamlit and powered by Google's Gemini AI.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3 class="project-title">Lotus Mind</h3>
+                            <div class="project-links">
+                                <a href="Projects/lotus-mind-project.html" title="View Details"><i class="fas fa-info-circle"></i></a>
+                                <a href="https://github.com/lakshya1410/LOTUS_MIND" target="_blank"><i class="fab fa-github"></i></a>
+                            </div>
+                        </div>
+                        <div class="project-body">
+                            <p class="project-description">
+                                Lotus Mind is a mental wellness platform that offers multiple features, including an AI chatbot built with Python and Streamlit. It also includes a journal-writing feature implemented using JavaScript.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <div class="container">
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="section-subtitle">Let's work together on something amazing</p>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h3>Let's Connect</h3>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:lakshyatripathiconnect@gmail.com">lakshyatripathiconnect@gmail.com</a>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Noida, India</span>
+                        </div>
+                        <a href="https://drive.google.com/file/d/1czJZQ_pHF7VPLCYmcxXZPHo8l_x0GebK/view?usp=drive_link" target="_blank" class="btn btn-primary">
+                            View Resume <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                    <form class="contact-form">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Your Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            Send Message <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Lakshya Tripathi. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Loading screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('hidden');
+            }, 1500);
+        });
+
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Typing Animation
+        const typingText = document.getElementById('typingText');
+        const texts = ['Lakshya Tripathi', 'Vibe Coder', 'AI Engineer', 'Lakshya Tripathi'];
+        let textIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 100;
+        let animationComplete = false;
+
+        function typeWriter() {
+            // Stop animation when complete
+            if (animationComplete) {
+                return;
+            }
+
+            const currentText = texts[textIndex];
+            
+            if (isDeleting) {
+                typingText.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+                typeSpeed = 50;
+            } else {
+                typingText.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+                typeSpeed = 100;
+            }
+
+            if (!isDeleting && charIndex === currentText.length) {
+                // Check if this is the last text
+                if (textIndex === texts.length - 1) {
+                    animationComplete = true;
+                    return;
+                }
+                // Finished typing, wait then start deleting
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                // Finished deleting, move to next text
+                isDeleting = false;
+                textIndex++;
+                typeSpeed = 500;
+            }
+
+            setTimeout(typeWriter, typeSpeed);
+        }
+
+        // Start typing animation after loading screen
+        setTimeout(() => {
+            typeWriter();
+        }, 2000);
+
+        // Active nav links
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 80) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Mobile menu functionality
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileNav = document.getElementById('mobileNav');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const closeMenu = document.getElementById('closeMenu');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-links a');
+        const mobileThemeToggle = document.getElementById('mobileThemeToggle');
+
+        const openMobileMenu = () => {
+            mobileNav.classList.add('active');
+            mobileOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeMobileMenu = () => {
+            mobileNav.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
+        menuToggle.addEventListener('click', openMobileMenu);
+        closeMenu.addEventListener('click', closeMobileMenu);
+        mobileOverlay.addEventListener('click', closeMobileMenu);
+
+        // Close mobile menu when clicking nav links
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        // Mobile theme toggle
+        mobileThemeToggle.addEventListener('click', () => {
+            const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            const icon = mobileThemeToggle.querySelector('i');
+            const text = mobileThemeToggle.querySelector('span');
+            if (newTheme === 'light') {
+                icon.className = 'fas fa-sun';
+                text.textContent = 'Dark Mode';
+            } else {
+                icon.className = 'fas fa-moon';
+                text.textContent = 'Light Mode';
+            }
+        });
+
+        // Update mobile nav active states
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 80) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            // Update desktop nav
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Update mobile nav
+            mobileNavLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html>
