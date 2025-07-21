@@ -6,6 +6,9 @@
     <title>Lakshya Tripathi - Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         :root {
             --bg-primary: #0f0f23;
@@ -370,6 +373,34 @@
         }
 
         .form-group textarea { resize: vertical; min-height: 120px; }
+
+        /* Status Messages */
+        .status-message {
+            padding: 0.8rem;
+            border-radius: 10px;
+            margin-top: 0.8rem;
+            font-weight: 500;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        .status-message.success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .status-message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
 
         /* Footer */
         footer {
@@ -736,22 +767,27 @@
                             View Resume <i class="fas fa-eye"></i>
                         </a>
                     </div>
-                    <form class="contact-form">
+                    <form class="contact-form" id="contact-form">
                         <div class="form-group">
                             <label for="name">Your Name</label>
-                            <input type="text" id="name" name="name" required>
+                            <input type="text" id="name" name="fullName" required>
                         </div>
                         <div class="form-group">
                             <label for="email">Your Email</label>
                             <input type="email" id="email" name="email" required>
                         </div>
                         <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        <div class="form-group">
                             <label for="message">Message</label>
                             <textarea id="message" name="message" required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary submit-btn">
                             Send Message <i class="fas fa-paper-plane"></i>
                         </button>
+                        <div id="status-message" class="status-message"></div>
                     </form>
                 </div>
             </div>
@@ -927,6 +963,67 @@
                     link.classList.add('active');
                 }
             });
+        });
+
+        // EmailJS Configuration
+        const EMAILJS_SERVICE_ID = 'service_2hf5n0o';
+        const EMAILJS_TEMPLATE_ID = 'template_qi4o4rq';
+        const EMAILJS_PUBLIC_KEY = 'k0MxRo-kO0acPf3Pv';
+
+        // Initialize EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        // Contact form submission
+        document.getElementById('contact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.querySelector('.submit-btn');
+            const statusMessage = document.getElementById('status-message');
+            const formData = new FormData(e.target);
+            
+            // Disable submit button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
+            statusMessage.style.display = 'none';
+            
+            try {
+                // Prepare email parameters
+                const templateParams = {
+                    from_name: formData.get('fullName'),
+                    from_email: formData.get('email'),
+                    subject: formData.get('subject'),
+                    message: formData.get('message'),
+                    to_email: 'lakshyatripathiconnect@gmail.com'
+                };
+
+                // Send email using EmailJS
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+                
+                // Show success message
+                statusMessage.textContent = 'Message sent successfully! I\'ll get back to you soon.';
+                statusMessage.className = 'status-message success';
+                statusMessage.style.display = 'block';
+                
+                // Reset form
+                e.target.reset();
+                
+            } catch (error) {
+                console.error('EmailJS Error:', error);
+                
+                // Show error message
+                statusMessage.textContent = 'Failed to send message. Please try again or contact me directly at lakshyatripathiconnect@gmail.com';
+                statusMessage.className = 'status-message error';
+                statusMessage.style.display = 'block';
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Send Message <i class="fas fa-paper-plane"></i>';
+                
+                // Hide status message after 5 seconds
+                setTimeout(() => {
+                    statusMessage.style.display = 'none';
+                }, 5000);
+            }
         });
     });
     </script>
