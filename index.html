@@ -250,6 +250,43 @@
             gap: 2rem; max-width: 1000px; margin: 0 auto;
         }
 
+        /* Education Section */
+        .education-timeline {
+            max-width: 800px; margin: 0 auto; position: relative;
+        }
+
+        .education-item {
+            background: var(--card-bg); padding: 2rem; border-radius: 20px;
+            border: 1px solid var(--border); margin-bottom: 2rem;
+            transition: all 0.3s ease; position: relative;
+        }
+
+        .education-item:hover {
+            transform: translateY(-5px); border-color: var(--accent-bright);
+            box-shadow: 0 15px 40px var(--shadow);
+        }
+
+        .education-item h3 {
+            color: var(--text-primary); font-size: 1.3rem; margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace; font-weight: 600;
+        }
+
+        .education-item .institution {
+            color: var(--text-secondary); font-size: 1rem; margin-bottom: 0.3rem;
+            font-weight: 500;
+        }
+
+        .education-item .branch {
+            color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.8rem;
+            font-style: italic;
+        }
+
+        .education-item .duration {
+            display: inline-block; background: var(--accent); color: white;
+            padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;
+            font-weight: 500;
+        }
+
         .skill-category {
             background: var(--card-bg); padding: 2rem; border-radius: 20px;
             border: 1px solid var(--border); text-align: center;
@@ -525,6 +562,7 @@
             <div class="nav-links">
                 <a href="#home" class="active">Home</a>
                 <a href="#about">About</a>
+                <a href="#education">Education</a>
                 <a href="#skills">Skills</a>
                 <a href="#projects">Projects</a>
                 <a href="#contact">Contact</a>
@@ -562,6 +600,9 @@
             </a>
             <a href="#about">
                 <i class="fas fa-user"></i> About
+            </a>
+            <a href="#education">
+                <i class="fas fa-graduation-cap"></i> Education
             </a>
             <a href="#skills">
                 <i class="fas fa-cog"></i> Skills
@@ -632,6 +673,27 @@
             </div>
         </section>
 
+        <section id="education" class="section">
+            <div class="container">
+                <h2 class="section-title">Education</h2>
+                <p class="section-subtitle">My academic journey</p>
+                <div class="education-timeline">
+                    <div class="education-item">
+                        <h3>Bachelor of Technology</h3>
+                        <p class="institution">G L Bajaj Institute of Technology and Management, Greater Noida</p>
+                        <p class="branch">Branch: Computer Science with Artificial Intelligence</p>
+                        <span class="duration">2023 – 2027</span>
+                    </div>
+                    
+                    <div class="education-item">
+                        <h3>Intermediate (10+2)</h3>
+                        <p class="institution">St. Lawrence School, Unnao</p>
+                        <span class="duration">2020 – 2023</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="skills" class="section">
             <div class="container">
                 <h2 class="section-title">Skills</h2>
@@ -660,6 +722,7 @@
                             <span class="skill-tag">NumPy</span>
                             <span class="skill-tag">Matplotlib</span>
                             <span class="skill-tag">Flask</span>
+                            <span class="skill-tag">FastAPI</span>
                             <span class="skill-tag">Langchain</span>
                         </div>
                     </div>
@@ -672,6 +735,7 @@
                             <span class="skill-tag">DSA</span>
                             <span class="skill-tag">Git</span>
                             <span class="skill-tag">GitHub</span>
+                            <span class="skill-tag">Docker</span>
                             <span class="skill-tag">API Integration</span>
                             <span class="skill-tag">GenAI</span>
                         </div>
