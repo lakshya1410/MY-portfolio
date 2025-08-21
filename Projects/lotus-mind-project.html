@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --bg-primary: #0f0f23;
+            --bg-primary: #0a0a0f;
             --bg-secondary: #1a1a2e;
             --bg-tertiary: #16213e;
             --text-primary: #e94560;
@@ -17,11 +17,15 @@
             --accent: #0f3460;
             --accent-bright: #e94560;
             --accent-secondary: #f39c12;
+            --accent-glow: rgba(233, 69, 96, 0.3);
             --border: #2c2c54;
             --card-bg: #16213e;
             --shadow: rgba(233, 69, 96, 0.2);
+            --shadow-glow: rgba(233, 69, 96, 0.4);
             --gradient: linear-gradient(135deg, #e94560, #f39c12);
             --gradient-2: linear-gradient(135deg, #0f3460, #e94560);
+            --gradient-3: linear-gradient(135deg, var(--accent-bright) 0%, var(--accent-secondary) 100%);
+            --particle-color: rgba(233, 69, 96, 0.6);
         }
 
         [data-theme="light"] {
@@ -284,6 +288,159 @@
             color: var(--accent-bright); font-size: 1.1rem;
         }
 
+        
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(233, 69, 96, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(15, 52, 96, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(243, 156, 18, 0.1) 0%, transparent 50%);
+            z-index: -2;
+            animation: backgroundPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundPulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        /* Floating Particles */
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--particle-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--particle-color);
+            animation: floatUp 15s infinite linear;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) scale(1);
+            }
+        }
+
+        /* Enhanced Card Hover Effects */
+        .feature-card {
+            background: var(--bg-primary); 
+            padding: 1.5rem; 
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            border-color: var(--accent-bright);
+            box-shadow: 0 20px 40px var(--shadow-glow);
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        /* Enhanced Button Animations */
+        .btn {
+            padding: 0.8rem 2rem; 
+            border: none; 
+            border-radius: 25px; 
+            font-weight: 600;
+            text-decoration: none; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 0.5rem;
+            font-size: 0.9rem; 
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-3); 
+            color: white;
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.2);
+        }
+
+        .btn-primary:hover { 
+            transform: translateY(-3px) scale(1.02); 
+            box-shadow: 0 15px 35px var(--shadow-glow); 
+        }
+
+        /* Enhanced Header */
+        header {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0;
+            background: rgba(10, 10, 15, 0.95); 
+            backdrop-filter: blur(20px);
+            z-index: 1000; 
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-links { display: none; }
@@ -296,6 +453,9 @@
     </style>
 </head>
 <body>
+    <!-- Floating Particles -->
+    <div class="floating-particles"></div>
+    
     <header>
         <nav class="container">
             <a href="../index.html" class="logo">lakshy.</a>
@@ -552,6 +712,65 @@ streamlit run lat.py
                 document.documentElement.setAttribute('data-theme', newTheme);
                 localStorage.setItem('theme', newTheme);
                 updateThemeIcon();
+            });
+
+            // Floating particles animation
+            const particleContainer = document.querySelector('.floating-particles');
+            
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random starting position
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = '100vh';
+                
+                // Random animation duration and delay
+                const duration = Math.random() * 20 + 10; // 10-30s
+                const delay = Math.random() * 5; // 0-5s
+                
+                particle.style.animationDuration = duration + 's';
+                particle.style.animationDelay = delay + 's';
+                
+                particleContainer.appendChild(particle);
+                
+                // Remove particle after animation
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, (duration + delay) * 1000);
+            }
+            
+            // Create particles continuously
+            setInterval(createParticle, 3000);
+            
+            // Create initial particles
+            for (let i = 0; i < 5; i++) {
+                setTimeout(createParticle, i * 1000);
+            }
+
+            // Scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe feature cards and content sections
+            document.querySelectorAll('.feature-card, .content-section, .project-hero').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                observer.observe(el);
             });
         });
     </script>

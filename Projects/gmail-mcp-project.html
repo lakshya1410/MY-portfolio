@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --bg-primary: #0f0f23;
+            --bg-primary: #0a0a0f;
             --bg-secondary: #1a1a2e;
             --bg-tertiary: #16213e;
             --text-primary: #e94560;
@@ -17,28 +17,36 @@
             --accent: #0f3460;
             --accent-bright: #e94560;
             --accent-secondary: #f39c12;
+            --accent-glow: rgba(233, 69, 96, 0.3);
             --border: #2c2c54;
-            --card-bg: #16213e;
+            --card-bg: linear-gradient(145deg, #16213e, #1a1a2e);
             --shadow: rgba(233, 69, 96, 0.2);
+            --shadow-glow: 0 0 30px rgba(233, 69, 96, 0.1);
             --gradient: linear-gradient(135deg, #e94560, #f39c12);
             --gradient-2: linear-gradient(135deg, #0f3460, #e94560);
+            --gradient-3: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --particle-color: rgba(233, 69, 96, 0.1);
         }
 
         [data-theme="light"] {
-            --bg-primary: #f8f9fa;
+            --bg-primary: #f8fafc;
             --bg-secondary: #ffffff;
-            --bg-tertiary: #e9ecef;
-            --text-primary: #2c2c54;
-            --text-secondary: #343a40;
-            --text-muted: #6c757d;
-            --accent: #e94560;
-            --accent-bright: #0f3460;
-            --accent-secondary: #f39c12;
-            --border: #dee2e6;
-            --card-bg: #ffffff;
-            --shadow: rgba(44, 44, 84, 0.1);
-            --gradient: linear-gradient(135deg, #e94560, #f39c12);
-            --gradient-2: linear-gradient(135deg, #0f3460, #e94560);
+            --bg-tertiary: #e2e8f0;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --accent: #e53e3e;
+            --accent-bright: #c53030;
+            --accent-secondary: #dd6b20;
+            --accent-glow: rgba(229, 62, 62, 0.2);
+            --border: #e2e8f0;
+            --card-bg: linear-gradient(145deg, #ffffff, #f7fafc);
+            --shadow: rgba(0, 0, 0, 0.1);
+            --shadow-glow: 0 0 30px rgba(0, 0, 0, 0.05);
+            --gradient: linear-gradient(135deg, #e53e3e, #dd6b20);
+            --gradient-2: linear-gradient(135deg, #3182ce, #e53e3e);
+            --gradient-3: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --particle-color: rgba(229, 62, 62, 0.05);
         }
 
         * {
@@ -57,6 +65,52 @@
             color: var(--text-secondary);
             line-height: 1.6;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, var(--particle-color) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, var(--particle-color) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, var(--particle-color) 0%, transparent 50%);
+            animation: backgroundFloat 20s ease-in-out infinite;
+            z-index: -2;
+        }
+
+        @keyframes backgroundFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(1deg); }
+            66% { transform: translateY(20px) rotate(-1deg); }
+        }
+
+        /* Floating Particles */
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--accent-glow);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
         }
 
         /* Custom Scrollbar */
@@ -74,9 +128,21 @@
         /* Header */
         header {
             position: fixed; top: 0; left: 0; right: 0;
-            background: rgba(15, 15, 35, 0.95); backdrop-filter: blur(20px);
+            background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(20px);
             z-index: 1000; border-bottom: 1px solid var(--border);
             transition: all 0.3s ease;
+            box-shadow: var(--shadow-glow);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gradient);
+            opacity: 0.5;
         }
         
         nav { 
@@ -158,14 +224,57 @@
         }
 
         .btn-primary {
-            background: var(--gradient); color: white;
+            background: var(--gradient); color: white; position: relative; overflow: hidden;
         }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px var(--shadow); }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover { 
+            transform: translateY(-3px) scale(1.05); 
+            box-shadow: 0 15px 40px var(--shadow);
+        }
 
         .btn-secondary {
-            background: transparent; color: var(--text-secondary); border: 1px solid var(--border);
+            background: transparent; color: var(--text-secondary); 
+            border: 1px solid var(--border); position: relative; overflow: hidden;
         }
-        .btn-secondary:hover { background: var(--card-bg); border-color: var(--accent-bright); }
+
+        .btn-secondary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--gradient);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .btn-secondary:hover::before {
+            width: 120%;
+            height: 120%;
+        }
+
+        .btn-secondary:hover { 
+            color: white; transform: translateY(-3px) scale(1.05);
+            border-color: var(--accent-bright);
+        }
 
         /* Content Sections */
         .content-section {
@@ -185,8 +294,31 @@
         }
 
         .feature-card {
-            background: var(--bg-primary); padding: 1.5rem; border-radius: 15px;
-            border: 1px solid var(--border);
+            background: var(--card-bg); padding: 1.5rem; border-radius: 15px;
+            border: 1px solid var(--border); transition: all 0.3s ease;
+            position: relative; overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--accent-bright);
+            box-shadow: 0 15px 40px var(--shadow);
         }
 
         .feature-card h4 {
@@ -202,10 +334,33 @@
         }
 
         .setup-step {
-            background: var(--bg-primary); padding: 1.5rem; border-radius: 15px;
+            background: var(--card-bg); padding: 1.5rem; border-radius: 15px;
             border: 1px solid var(--border); margin-bottom: 1.5rem;
             counter-increment: step-counter;
-            position: relative;
+            position: relative; transition: all 0.3s ease; overflow: hidden;
+        }
+
+        .setup-step::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            transform-origin: bottom;
+        }
+
+        .setup-step:hover::after {
+            transform: scaleY(1);
+        }
+
+        .setup-step:hover {
+            transform: translateY(-5px) translateX(8px);
+            border-color: var(--accent-bright);
+            box-shadow: 0 10px 30px var(--shadow);
         }
 
         .setup-step::before {
@@ -267,6 +422,9 @@
     </style>
 </head>
 <body>
+    <!-- Floating Particles -->
+    <div class="floating-particles" id="particles"></div>
+    
     <header>
         <nav class="container">
             <a href="../index.html" class="logo">lakshy.</a>
@@ -592,6 +750,65 @@ python gmail_auth_test.py
                 document.documentElement.setAttribute('data-theme', newTheme);
                 localStorage.setItem('theme', newTheme);
                 updateThemeIcon();
+            });
+
+            // Floating particles animation
+            const particleContainer = document.querySelector('.floating-particles');
+            
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random starting position
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = '100vh';
+                
+                // Random animation duration and delay
+                const duration = Math.random() * 20 + 10; // 10-30s
+                const delay = Math.random() * 5; // 0-5s
+                
+                particle.style.animationDuration = duration + 's';
+                particle.style.animationDelay = delay + 's';
+                
+                particleContainer.appendChild(particle);
+                
+                // Remove particle after animation
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, (duration + delay) * 1000);
+            }
+            
+            // Create particles continuously
+            setInterval(createParticle, 3000);
+            
+            // Create initial particles
+            for (let i = 0; i < 5; i++) {
+                setTimeout(createParticle, i * 1000);
+            }
+
+            // Scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe feature cards and overview sections
+            document.querySelectorAll('.feature-card, .overview-section, .tech-stack, .installation-section, .usage-section, .features-section').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                observer.observe(el);
             });
         });
     </script>
