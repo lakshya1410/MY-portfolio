@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FALCON Command Center - Lakshya Jain Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --text-primary: #e94560;
+            --text-secondary: #f5f5f5;
+            --text-muted: #a0a0a0;
+            --accent: #0f3460;
+            --accent-bright: #e94560;
+            --accent-secondary: #f39c12;
+            --accent-glow: rgba(233, 69, 96, 0.3);
+            --border: #2c2c54;
+            --card-bg: #16213e;
+            --shadow: rgba(233, 69, 96, 0.2);
+            --shadow-glow: rgba(233, 69, 96, 0.4);
+            --gradient: linear-gradient(135deg, #e94560, #f39c12);
+            --gradient-2: linear-gradient(135deg, #0f3460, #e94560);
+            --gradient-3: linear-gradient(135deg, var(--accent-bright) 0%, var(--accent-secondary) 100%);
+            --particle-color: rgba(233, 69, 96, 0.6);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --text-primary: #2c3e50;
+            --text-secondary: #2c3e50;
+            --text-muted: #6c757d;
+            --card-bg: #ffffff;
+            --border: #dee2e6;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --shadow-glow: rgba(0, 0, 0, 0.2);
+            --particle-color: rgba(44, 62, 80, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            background: var(--bg-primary);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(233, 69, 96, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(15, 52, 96, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(243, 156, 18, 0.1) 0%, transparent 50%);
+            z-index: -2;
+            animation: backgroundPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundPulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        /* Floating Particles */
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--particle-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--particle-color);
+            animation: floatUp 15s infinite linear;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) scale(1);
+            }
+        }
+
+        /* Enhanced Header */
+        header {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0;
+            background: rgba(10, 10, 15, 0.95); 
+            backdrop-filter: blur(20px);
+            z-index: 1000; 
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-bright);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-bright);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent-bright);
+            color: var(--accent-bright);
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Project Hero */
+        .project-hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border);
+        }
+
+        .project-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-bright);
+            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .project-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .project-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.8;
+        }
+
+        /* Enhanced Button Animations */
+        .btn {
+            padding: 0.8rem 2rem; 
+            border: none; 
+            border-radius: 25px; 
+            font-weight: 600;
+            text-decoration: none; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 0.5rem;
+            font-size: 0.9rem; 
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-3); 
+            color: white;
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.2);
+        }
+
+        .btn-primary:hover { 
+            transform: translateY(-3px) scale(1.02); 
+            box-shadow: 0 15px 35px var(--shadow-glow); 
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-bright);
+            color: var(--accent-bright);
+            transform: translateY(-2px);
+        }
+
+        /* Content Sections */
+        .content-section {
+            margin-bottom: 3rem;
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-bright);
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .section-subtitle {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Enhanced Card Hover Effects */
+        .feature-card {
+            background: var(--bg-primary); 
+            padding: 1.5rem; 
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            border-color: var(--accent-bright);
+            box-shadow: 0 20px 40px var(--shadow-glow);
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card h3 {
+            color: var(--accent-bright);
+            margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Architecture Grid */
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .tech-item {
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            color: var(--accent-bright);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Commands List */
+        .commands-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .command-item {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .command-item .command {
+            color: var(--accent-bright);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .command-item .description {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Project Structure */
+        .project-structure {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .project-structure .folder {
+            color: var(--accent-secondary);
+            font-weight: 600;
+        }
+
+        .project-structure .file {
+            color: var(--text-secondary);
+        }
+
+        .project-structure .comment {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .project-title { font-size: 2rem; }
+            .container { padding: 0 1rem; }
+            .architecture-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .commands-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles -->
+    <div class="floating-particles"></div>
+    
+    <header>
+        <nav>
+            <a href="../index.html" class="logo">&lt;LJ/&gt;</a>
+            <ul class="nav-links">
+                <li><a href="../index.html#home">Home</a></li>
+                <li><a href="../index.html#about">About</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../index.html#contact">Contact</a></li>
+            </ul>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-sun"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Project Hero -->
+            <section class="project-hero">
+                <h1 class="project-title">FALCON Command Center 🦅</h1>
+                <p class="project-subtitle">Fall Alert Landslide Condition Observation Network</p>
+                <p class="project-description">
+                    A full-stack application for rockfall prediction, risk analysis, and route optimization using drone imagery and machine learning. 
+                    This was my Smart India Hackathon (SIH) project where I contributed in developing the backend infrastructure and the crack segmentation model using computer vision techniques.
+                </p>
+                <div style="margin-top: 2rem;">
+                    <a href="#architecture" class="btn btn-primary">
+                        <i class="fas fa-code"></i> View Architecture
+                    </a>
+                    <a href="#features" class="btn btn-secondary">
+                        <i class="fas fa-list"></i> Features
+                    </a>
+                </div>
+            </section>
+
+            <!-- Quick Start -->
+            <section class="content-section">
+                <h2 class="section-title">⚡ Quick Start</h2>
+                <div class="code-block">
+                    <code>
+# Install dependencies<br>
+npm run install:all<br><br>
+
+# Start development servers<br>
+npm run dev<br><br>
+
+<span style="color: var(--text-muted);"># Access Points:</span><br>
+Frontend: http://localhost:5173<br>
+Backend: http://localhost:8000<br>
+API Docs: http://localhost:8000/docs
+                    </code>
+                </div>
+            </section>
+
+            <!-- Architecture -->
+            <section class="content-section" id="architecture">
+                <h2 class="section-title">🏗️ Architecture</h2>
+                
+                <h3 class="section-subtitle">Project Structure</h3>
+                <div class="project-structure">
+<span class="folder">FALCON/</span><br>
+├── <span class="folder">frontend/</span>                           <span class="comment"># React + TypeScript Frontend</span><br>
+│   ├── <span class="folder">src/</span><br>
+│   │   ├── <span class="folder">components/</span><br>
+│   │   │   ├── <span class="folder">PredictionWorkflow/</span><br>
+│   │   │   │   ├── <span class="file">DataInjection.tsx</span>   <span class="comment"># File upload & data input</span><br>
+│   │   │   │   ├── <span class="file">ModelPredicting.tsx</span> <span class="comment"># ML model execution</span><br>
+│   │   │   │   └── <span class="file">RockfallForecast.tsx</span> <span class="comment"># Results visualization</span><br>
+│   │   │   ├── <span class="file">AuthModal.tsx</span>           <span class="comment"># Authentication system</span><br>
+│   │   │   ├── <span class="file">Dashboard.tsx</span>           <span class="comment"># Main control center</span><br>
+│   │   │   ├── <span class="file">InteractiveMapNew.tsx</span>   <span class="comment"># Map visualization</span><br>
+│   │   │   ├── <span class="file">Navigation.tsx</span>          <span class="comment"># Top navigation bar</span><br>
+│   │   │   ├── <span class="file">OptimizedRoute.tsx</span>      <span class="comment"># Route planning</span><br>
+│   │   │   ├── <span class="file">RiskAnalysisPanel.tsx</span>   <span class="comment"># Risk assessment display</span><br>
+│   │   │   ├── <span class="file">LeftSidebar.js</span>          <span class="comment"># Dashboard sidebar</span><br>
+│   │   │   ├── <span class="file">RightSidebar.js</span>         <span class="comment"># Dashboard controls</span><br>
+│   │   │   └── <span class="file">SimpleMap.tsx</span>           <span class="comment"># Basic map component</span><br>
+│   │   ├── <span class="folder">services/</span><br>
+│   │   │   └── <span class="file">api.ts</span>                  <span class="comment"># API service layer</span><br>
+│   │   ├── <span class="folder">lib/</span><br>
+│   │   │   ├── <span class="file">completeAuth.ts</span>         <span class="comment"># Authentication logic</span><br>
+│   │   │   └── <span class="file">firebaseConfig.ts</span>       <span class="comment"># Firebase configuration</span><br>
+│   │   ├── <span class="file">App.tsx</span>                     <span class="comment"># Main application component</span><br>
+│   │   ├── <span class="file">main.tsx</span>                    <span class="comment"># Application entry point</span><br>
+│   │   └── <span class="file">index.css</span>                   <span class="comment"># Global styles</span><br>
+│   ├── <span class="folder">public/</span><br>
+│   │   ├── <span class="file">falcon-logo.png</span>             <span class="comment"># Application logo</span><br>
+│   │   └── <span class="file">index.html</span>                  <span class="comment"># HTML template</span><br>
+│   ├── <span class="file">vite.config.ts</span>                  <span class="comment"># Vite build configuration</span><br>
+│   ├── <span class="file">tailwind.config.js</span>              <span class="comment"># Tailwind CSS configuration</span><br>
+│   ├── <span class="file">tsconfig.json</span>                   <span class="comment"># TypeScript configuration</span><br>
+│   └── <span class="file">package.json</span>                    <span class="comment"># Frontend dependencies</span><br>
+├── <span class="folder">backend/</span>                            <span class="comment"># FastAPI Python Backend</span><br>
+│   ├── <span class="file">main.py</span>                         <span class="comment"># FastAPI application & endpoints</span><br>
+│   ├── <span class="folder">models/</span>                         <span class="comment"># ML Model files</span><br>
+│   │   ├── <span class="file">weather_pipeline.pkl</span>        <span class="comment"># Weather prediction model</span><br>
+│   │   ├── <span class="file">crack_segmentation.h5</span>       <span class="comment"># Crack detection model</span><br>
+│   │   └── <span class="file">DEM.pkl</span>                     <span class="comment"># Digital Elevation Model</span><br>
+│   ├── <span class="file">weather_processor.py</span>            <span class="comment"># Weather analysis module</span><br>
+│   ├── <span class="file">crack_segmentation.py</span>           <span class="comment"># Crack detection module</span><br>
+│   ├── <span class="file">dem_processor.py</span>                <span class="comment"># DEM analysis module</span><br>
+│   ├── <span class="file">requirements.txt</span>                <span class="comment"># Python dependencies</span><br>
+│   └── <span class="file">.env</span>                           <span class="comment"># Environment variables</span><br>
+├── <span class="file">package.json</span>                        <span class="comment"># Root development scripts</span><br>
+└── <span class="file">README.md</span>                          <span class="comment"># Project documentation</span>
+                </div>
+
+                <h3 class="section-subtitle">System Architecture</h3>
+                <div class="architecture-grid">
+                    <div class="feature-card">
+                        <h3>Frontend Layer (React + TypeScript)</h3>
+                        <ul style="margin-top: 1rem; color: var(--text-secondary);">
+                            <li>Component-Based Architecture: Modular React components with TypeScript</li>
+                            <li>State Management: React hooks and context for global state</li>
+                            <li>Styling: Tailwind CSS with glassmorphism design patterns</li>
+                            <li>Routing: Client-side routing for SPA experience</li>
+                            <li>API Integration: Axios-based service layer for backend communication</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>Backend Layer (FastAPI + Python)</h3>
+                        <ul style="margin-top: 1rem; color: var(--text-secondary);">
+                            <li>RESTful API: FastAPI framework with automatic OpenAPI documentation</li>
+                            <li>ML Pipeline: Multi-model prediction system with three specialized models</li>
+                            <li>Data Processing: File upload handling for drone images and elevation data</li>
+                            <li>Authentication: JWT-based user authentication system</li>
+                            <li>CORS Configuration: Cross-origin resource sharing for frontend integration</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>Machine Learning Pipeline</h3>
+                        <ul style="margin-top: 1rem; color: var(--text-secondary);">
+                            <li><strong>Weather Model:</strong> Meteorological risk assessment</li>
+                            <li><strong>Crack Segmentation:</strong> Computer vision for structural analysis</li>
+                            <li><strong>DEM Analysis:</strong> Topographical and geological risk evaluation</li>
+                        </ul>
+                        <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-primary); border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">
+                            Data Input → Preprocessing → Multi-Model Analysis → Risk Averaging → Results
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features -->
+            <section class="content-section" id="features">
+                <h2 class="section-title">🚀 Features</h2>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3><i class="fas fa-desktop"></i> Frontend</h3>
+                        <ul style="margin-top: 1rem; color: var(--text-secondary);">
+                            <li>Interactive dashboard with real-time monitoring</li>
+                            <li>Risk analysis panel with severity mapping</li>
+                            <li>Route optimization with interactive maps</li>
+                            <li>Prediction workflow (Data Injection → Model Prediction → Results)</li>
+                            <li>Authentication system with glassmorphism design</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3><i class="fas fa-server"></i> Backend</h3>
+                        <ul style="margin-top: 1rem; color: var(--text-secondary);">
+                            <li>RESTful API with auto-documentation</li>
+                            <li>ML model integration (Weather, Crack Segmentation, DEM)</li>
+                            <li>Multi-model risk assessment with averaging</li>
+                            <li>File upload for drone images and DEM data</li>
+                            <li>Real-time data processing</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tech Stack -->
+            <section class="content-section">
+                <h2 class="section-title">🛠️ Tech Stack</h2>
+                <div class="tech-stack">
+                    <span class="tech-item">React 18</span>
+                    <span class="tech-item">TypeScript</span>
+                    <span class="tech-item">Vite</span>
+                    <span class="tech-item">Tailwind CSS</span>
+                    <span class="tech-item">FastAPI</span>
+                    <span class="tech-item">Python 3.8+</span>
+                    <span class="tech-item">Machine Learning</span>
+                    <span class="tech-item">Computer Vision</span>
+                    <span class="tech-item">OpenCV</span>
+                    <span class="tech-item">Firebase</span>
+                </div>
+            </section>
+
+            <!-- Commands -->
+            <section class="content-section">
+                <h2 class="section-title">🔧 Commands</h2>
+                <div class="commands-list">
+                    <div class="command-item">
+                        <div class="command">npm run dev</div>
+                        <div class="description">Start both servers</div>
+                    </div>
+                    <div class="command-item">
+                        <div class="command">npm run dev:frontend</div>
+                        <div class="description">Frontend only</div>
+                    </div>
+                    <div class="command-item">
+                        <div class="command">npm run dev:backend</div>
+                        <div class="description">Backend only</div>
+                    </div>
+                    <div class="command-item">
+                        <div class="command">npm run build</div>
+                        <div class="description">Build for production</div>
+                    </div>
+                    <div class="command-item">
+                        <div class="command">npm run install:all</div>
+                        <div class="description">Install all dependencies</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- API Endpoints -->
+            <section class="content-section">
+                <h2 class="section-title">📚 Key API Endpoints</h2>
+                <div class="feature-card">
+                    <div class="code-block">
+                        <code>
+<span style="color: var(--accent-secondary);">POST</span> /api/comprehensive-analysis <span style="color: var(--text-muted);"># Multi-model risk analysis</span><br>
+<span style="color: var(--accent-secondary);">POST</span> /api/auth/login <span style="color: var(--text-muted);"># User authentication</span><br>
+<span style="color: var(--accent-secondary);">GET</span> /api/monitoring/live-data <span style="color: var(--text-muted);"># Real-time monitoring</span>
+                        </code>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Deployment -->
+            <section class="content-section">
+                <h2 class="section-title">🚀 Deployment</h2>
+                <div class="architecture-grid">
+                    <div class="feature-card">
+                        <h3>Frontend:</h3>
+                        <div class="code-block">
+                            <code>cd frontend<br>npm run dev</code>
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Backend:</h3>
+                        <div class="code-block">
+                            <code>cd backend<br>pip install -r requirements.txt<br>uvicorn main:app --host 0.0.0.0 --port 8000 --reload</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <section class="content-section">
+                <div style="text-align: center;">
+                    <p style="color: var(--accent-bright); font-weight: 600; font-size: 1.2rem; margin-bottom: 1rem;">
+                        FALCON Command Center - Advanced geospatial analysis for safer navigation 🦅
+                    </p>
+                    <p style="color: var(--text-secondary); font-size: 1.1rem;">
+                        Made with ❤️ by Lakshya Tripathi
+                    </p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+
+            // Update theme toggle icon
+            const updateThemeIcon = () => {
+                const theme = document.documentElement.getAttribute('data-theme');
+                const icon = themeToggle.querySelector('i');
+                icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            };
+
+            updateThemeIcon();
+
+            themeToggle.addEventListener('click', () => {
+                const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon();
+            });
+
+            // Floating particles animation
+            const particleContainer = document.querySelector('.floating-particles');
+            
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random starting position
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = '100vh';
+                
+                // Random animation duration and delay
+                const duration = Math.random() * 20 + 10; // 10-30s
+                const delay = Math.random() * 5; // 0-5s
+                
+                particle.style.animationDuration = duration + 's';
+                particle.style.animationDelay = delay + 's';
+                
+                particleContainer.appendChild(particle);
+                
+                // Remove particle after animation
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, (duration + delay) * 1000);
+            }
+            
+            // Create particles continuously
+            setInterval(createParticle, 3000);
+            
+            // Create initial particles
+            for (let i = 0; i < 5; i++) {
+                setTimeout(createParticle, i * 1000);
+            }
+
+            // Scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe feature cards and content sections
+            document.querySelectorAll('.feature-card, .content-section, .project-hero').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
