@@ -288,7 +288,125 @@
             100% { opacity: 0.8; transform: scale(1.05); }
         }
 
-        .hero-content { position: relative; z-index: 1; }
+        .hero-content { 
+            position: relative; 
+            z-index: 1; 
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hero-text {
+            flex: 1;
+            text-align: left;
+        }
+
+        .hero-image {
+            flex: 0 0 auto;
+            position: relative;
+        }
+
+        .profile-image-container {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            margin: 0 auto;
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid transparent;
+            background: var(--gradient);
+            padding: 4px;
+            transition: all 0.5s ease;
+            animation: profileFloat 6s ease-in-out infinite;
+            box-shadow: 
+                0 0 0 4px rgba(233, 69, 96, 0.1),
+                0 0 50px rgba(233, 69, 96, 0.2),
+                inset 0 0 50px rgba(233, 69, 96, 0.1);
+        }
+
+        .profile-image:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 
+                0 0 0 4px rgba(233, 69, 96, 0.3),
+                0 0 80px rgba(233, 69, 96, 0.4),
+                inset 0 0 50px rgba(233, 69, 96, 0.2);
+        }
+
+        @keyframes profileFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        .profile-image-container::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                var(--accent-bright),
+                var(--accent-secondary),
+                var(--accent-bright)
+            );
+            animation: rotate 8s linear infinite;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .profile-image-container::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 180deg,
+                transparent,
+                rgba(233, 69, 96, 0.1),
+                transparent
+            );
+            animation: rotate 12s linear infinite reverse;
+            z-index: -2;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .profile-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(
+                circle,
+                rgba(233, 69, 96, 0.1) 0%,
+                transparent 70%
+            );
+            transform: translate(-50%, -50%);
+            animation: glowPulse 4s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+        }
         
         .hero-badge {
             display: inline-block; padding: 0.5rem 1.5rem; 
@@ -482,9 +600,92 @@
         }
 
         /* Skills Section */
+        .skill-category-section {
+            margin-bottom: 3rem;
+        }
+
+        .category-title {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .category-icon {
+            font-size: 1.3rem;
+            color: var(--accent-bright);
+        }
+
         .skills-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem; max-width: 1000px; margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .skill-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: left;
+        }
+
+        .skill-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-bright);
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .skill-card .skill-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .skill-card:hover .skill-icon {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        .skill-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: block;
         }
 
         /* Education Section */
@@ -543,12 +744,31 @@
         }
 
         .skill-category {
-            background: var(--card-bg); padding: 2rem; border-radius: 20px;
-            border: 1px solid var(--border); text-align: center;
-            transition: all 0.3s ease; position: relative; overflow: hidden;
+            background: var(--card-bg); 
+            padding: 2.5rem 2rem; 
+            border-radius: 25px;
+            border: 2px solid var(--border); 
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            position: relative; 
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .skill-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(233, 69, 96, 0.1), transparent);
+            transition: left 0.6s ease;
+            z-index: 1;
+        }
+
+        .skill-category::after {
             content: '';
             position: absolute;
             top: 0;
@@ -557,44 +777,73 @@
             height: 100%;
             background: var(--gradient-3);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
+            z-index: 0;
         }
 
         .skill-category:hover::before {
-            opacity: 0.05;
+            left: 100%;
+        }
+
+        .skill-category:hover::after {
+            opacity: 0.08;
         }
 
         .skill-category:hover {
-            transform: translateY(-8px) rotateY(5deg); 
+            transform: translateY(-12px) scale(1.02); 
             border-color: var(--accent-bright);
-            box-shadow: 0 20px 60px var(--shadow);
+            box-shadow: 
+                0 25px 80px rgba(233, 69, 96, 0.15),
+                0 0 0 1px rgba(233, 69, 96, 0.1);
         }
 
         .skill-icon {
-            width: 60px; height: 60px; background: var(--gradient);
-            border-radius: 15px; display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 1.5rem; font-size: 1.5rem; color: white;
-            transition: all 0.3s ease; position: relative;
+            width: 60px; 
+            height: 60px; 
+            background: var(--gradient);
+            border-radius: 15px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            margin: 0 auto 1.5rem; 
+            font-size: 1.5rem; 
+            color: white;
+            transition: all 0.3s ease; 
+            position: relative;
         }
 
         .skill-category:hover .skill-icon {
-            transform: scale(1.2) rotate(10deg);
+            transform: scale(1.1) rotate(5deg);
             box-shadow: 0 10px 30px var(--shadow);
         }
 
         .skill-category h3 {
-            color: var(--text-primary); font-size: 1.3rem; margin-bottom: 1rem;
+            color: var(--text-primary); 
+            font-size: 1.3rem; 
+            margin-bottom: 1rem;
             font-family: 'JetBrains Mono', monospace;
         }
 
         .skill-list {
-            display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 0.8rem; 
+            justify-content: center;
+            position: relative;
+            z-index: 2;
         }
 
         .skill-tag {
-            background: var(--accent); color: white; padding: 0.3rem 0.8rem;
-            border-radius: 15px; font-size: 0.8rem; font-weight: 500;
-            transition: all 0.3s ease; position: relative; overflow: hidden;
+            background: var(--accent); 
+            color: white; 
+            padding: 0.4rem 1rem;
+            border-radius: 20px; 
+            font-size: 0.85rem; 
+            font-weight: 500;
+            transition: all 0.3s ease; 
+            position: relative; 
+            overflow: hidden;
+            cursor: pointer;
         }
 
         .skill-tag::before {
@@ -704,6 +953,65 @@
 
         .contact-item i {
             color: var(--text-primary); width: 20px; text-align: center;
+        }
+
+        .contact-social {
+            margin: 2rem 0;
+        }
+
+        .contact-social h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .contact-social-links {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: flex-start;
+        }
+
+        .contact-social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .contact-social-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .contact-social-links a:hover::before {
+            opacity: 0.1;
+        }
+
+        .contact-social-links a:hover {
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .contact-social-links a i {
+            position: relative;
+            z-index: 1;
         }
 
         .contact-form {
@@ -847,6 +1155,17 @@
         .mobile-overlay.active { opacity: 1; visibility: visible; }
 
         /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-content {
+                gap: 2rem;
+            }
+            
+            .profile-image-container {
+                width: 280px;
+                height: 280px;
+            }
+        }
+
         @media (max-width: 768px) {
             .nav-links, .nav-right .social-links { display: none; }
             .menu-toggle {
@@ -856,11 +1175,49 @@
             
             .mobile-nav { display: flex; }
             
+            /* Hero responsive styles */
+            .hero-content {
+                flex-direction: column-reverse;
+                gap: 2rem;
+                text-align: center;
+            }
+            
+            .hero-text {
+                text-align: center;
+            }
+            
+            .profile-image-container {
+                width: 250px;
+                height: 250px;
+            }
+            
             .hero h1, .typing-text { font-size: 2.5rem; }
             .section-title { font-size: 2rem; }
             .contact-content { grid-template-columns: 1fr; gap: 2rem; }
             .projects-grid { grid-template-columns: 1fr; }
-            .skills-grid { grid-template-columns: 1fr; }
+            .skills-grid { 
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+                gap: 1rem;
+            }
+            
+            .category-title {
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+            }
+            
+            .skill-card {
+                padding: 1.2rem 0.8rem;
+            }
+            
+            .skill-card .skill-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+            
+            .skill-name {
+                font-size: 0.85rem;
+            }
             .hero-cta { flex-direction: column; align-items: center; }
         }
 
@@ -868,6 +1225,63 @@
             .hero h1, .typing-text { font-size: 2rem; }
             .section { padding: 3rem 0; }
             .container { padding: 0 1rem; }
+            
+            /* Mobile hero styles */
+            .hero-content {
+                padding: 0 1rem;
+                gap: 1.5rem;
+            }
+            
+            .profile-image-container {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .profile-glow {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .btn {
+                padding: 0.7rem 1.5rem;
+                font-size: 0.85rem;
+            }
+            
+            /* Mobile skills adjustments */
+            .skills-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 0.8rem;
+            }
+            
+            .skill-category-section {
+                margin-bottom: 2rem;
+            }
+            
+            .category-title {
+                font-size: 1.2rem;
+                gap: 0.6rem;
+            }
+            
+            .skill-card {
+                padding: 1rem 0.6rem;
+            }
+            
+            .skill-card .skill-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+                margin-bottom: 0.8rem;
+            }
+            
+            .skill-name {
+                font-size: 0.8rem;
+            }
+            
+
         }
     </style>
 </head>
@@ -887,8 +1301,8 @@
                 <a href="#home" class="active">Home</a>
                 <a href="#about">About</a>
                 <a href="#education">Education</a>
-                <a href="#skills">Skills</a>
                 <a href="#projects">Projects</a>
+                <a href="#skills">Skills</a>
                 <a href="#contact">Contact</a>
             </div>
             <div class="nav-right">
@@ -928,11 +1342,11 @@
             <a href="#education">
                 <i class="fas fa-graduation-cap"></i> Education
             </a>
-            <a href="#skills">
-                <i class="fas fa-cog"></i> Skills
-            </a>
             <a href="#projects">
                 <i class="fas fa-code"></i> Projects
+            </a>
+            <a href="#skills">
+                <i class="fas fa-cog"></i> Skills
             </a>
             <a href="#contact">
                 <i class="fas fa-envelope"></i> Contact
@@ -966,18 +1380,26 @@
     <main>
         <section id="home" class="hero">
             <div class="hero-content">
-                <div class="hero-badge">👋 Welcome to my portfolio</div>
-                <div class="typing-container">
-                    <h1 id="typingText" class="typing-text">Lakshya Tripathi</h1>
+                <div class="hero-text">
+                    <div class="hero-badge">👋 Welcome to my portfolio</div>
+                    <div class="typing-container">
+                        <h1 id="typingText" class="typing-text">Lakshya Tripathi</h1>
+                    </div>
+                    <p class="hero-subtitle">CS-AI Engineer & Machine Learning Enthusiast</p>
+                    <div class="hero-cta">
+                        <a href="#projects" class="btn btn-primary">
+                            View My Work <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="#contact" class="btn btn-secondary">
+                            Get In Touch <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
                 </div>
-                <p class="hero-subtitle">CS-AI Engineer & Machine Learning Enthusiast</p>
-                <div class="hero-cta">
-                    <a href="#projects" class="btn btn-primary">
-                        View My Work <i class="fas fa-arrow-right"></i>
-                    </a>
-                    <a href="#contact" class="btn btn-secondary">
-                        Get In Touch <i class="fas fa-envelope"></i>
-                    </a>
+                <div class="hero-image">
+                    <div class="profile-glow"></div>
+                    <div class="profile-image-container">
+                        <img src="lak_img.jpg" alt="Lakshya Tripathi" class="profile-image">
+                    </div>
                 </div>
             </div>
         </section>
@@ -1013,56 +1435,6 @@
                         <h3>Intermediate (10+2)</h3>
                         <p class="institution">St. Lawrence School, Unnao</p>
                         <span class="duration">2020 – 2023</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="skills" class="section">
-            <div class="container">
-                <h2 class="section-title">Skills</h2>
-                <p class="section-subtitle">Technologies I work with</p>
-                <div class="skills-grid">
-                    <div class="skill-category">
-                        <div class="skill-icon">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <h3>Languages</h3>
-                        <div class="skill-list">
-                            <span class="skill-tag">Java</span>
-                            <span class="skill-tag">Python</span>
-                            <span class="skill-tag">C</span>
-                            <span class="skill-tag">HTML</span>
-                            <span class="skill-tag">CSS</span>
-                        </div>
-                    </div>
-                    <div class="skill-category">
-                        <div class="skill-icon">
-                            <i class="fas fa-laptop-code"></i>
-                        </div>
-                        <h3>Libraries</h3>
-                        <div class="skill-list">
-                            <span class="skill-tag">Pandas</span>
-                            <span class="skill-tag">NumPy</span>
-                            <span class="skill-tag">Matplotlib</span>
-                            <span class="skill-tag">Flask</span>
-                            <span class="skill-tag">FastAPI</span>
-                            <span class="skill-tag">Langchain</span>
-                        </div>
-                    </div>
-                    <div class="skill-category">
-                        <div class="skill-icon">
-                            <i class="fas fa-tools"></i>
-                        </div>
-                        <h3>Tech Skills</h3>
-                        <div class="skill-list">
-                            <span class="skill-tag">DSA</span>
-                            <span class="skill-tag">Git</span>
-                            <span class="skill-tag">GitHub</span>
-                            <span class="skill-tag">Docker</span>
-                            <span class="skill-tag">API Integration</span>
-                            <span class="skill-tag">GenAI</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -1151,6 +1523,191 @@
             </div>
         </section>
 
+        <section id="skills" class="section">
+            <div class="container">
+                <h2 class="section-title">Skills</h2>
+                <p class="section-subtitle">Technologies I work with</p>
+                
+                <!-- Programming Languages -->
+                <div class="skill-category-section">
+                    <h3 class="category-title">
+                        <i class="fas fa-code category-icon"></i>
+                        Programming Languages
+                    </h3>
+                    <div class="skills-grid">
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fab fa-java"></i>
+                            </div>
+                            <span class="skill-name">Java</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fab fa-python"></i>
+                            </div>
+                            <span class="skill-name">Python</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <span class="skill-name">C</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fab fa-html5"></i>
+                            </div>
+                            <span class="skill-name">HTML</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fab fa-css3-alt"></i>
+                            </div>
+                            <span class="skill-name">CSS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Libraries & Frameworks -->
+                <div class="skill-category-section">
+                    <h3 class="category-title">
+                        <i class="fas fa-book-open category-icon"></i>
+                        Libraries & Frameworks
+                    </h3>
+                    <div class="skills-grid">
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-table"></i>
+                            </div>
+                            <span class="skill-name">Pandas</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-calculator"></i>
+                            </div>
+                            <span class="skill-name">NumPy</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <span class="skill-name">Matplotlib</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <span class="skill-name">Flask</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <span class="skill-name">FastAPI</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-stream"></i>
+                            </div>
+                            <span class="skill-name">Streamlit</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI/ML -->
+                <div class="skill-category-section">
+                    <h3 class="category-title">
+                        <i class="fas fa-brain category-icon"></i>
+                        AI/ML
+                    </h3>
+                    <div class="skills-grid">
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <span class="skill-name">Generative AI</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-link"></i>
+                            </div>
+                            <span class="skill-name">Langchain</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-network-wired"></i>
+                            </div>
+                            <span class="skill-name">U-Net</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <span class="skill-name">LLMs (GPT, Gemini, Groq)</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-plug"></i>
+                            </div>
+                            <span class="skill-name">MCP</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tech Skills -->
+                <div class="skill-category-section">
+                    <h3 class="category-title">
+                        <i class="fas fa-tools category-icon"></i>
+                        Tech Skills
+                    </h3>
+                    <div class="skills-grid">
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-sitemap"></i>
+                            </div>
+                            <span class="skill-name">DSA</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fab fa-git-alt"></i>
+                            </div>
+                            <span class="skill-name">Git</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fab fa-github"></i>
+                            </div>
+                            <span class="skill-name">GitHub</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <span class="skill-name">API Integration</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fas fa-spider"></i>
+                            </div>
+                            <span class="skill-name">Web Scraping</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fab fa-docker"></i>
+                            </div>
+                            <span class="skill-name">Docker</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <i class="fab fa-google"></i>
+                            </div>
+                            <span class="skill-name">Google OAuth</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="contact" class="section">
             <div class="container">
                 <h2 class="section-title">Get In Touch</h2>
@@ -1165,6 +1722,15 @@
                         <div class="contact-item">
                             <i class="fas fa-map-marker-alt"></i>
                             <span>Noida, India</span>
+                        </div>
+                        <div class="contact-social">
+                            <h4>Find me on</h4>
+                            <div class="contact-social-links">
+                                <a href="https://www.linkedin.com/in/lakshyatripathi1410/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                                <a href="https://x.com/is_lakshy" target="_blank"><i class="fab fa-twitter"></i></a>
+                                <a href="https://github.com/lakshya1410" target="_blank"><i class="fab fa-github"></i></a>
+                                <a href="https://leetcode.com/u/lakshytripathi/" target="_blank"><i class="fas fa-code"></i></a>
+                            </div>
                         </div>
                         <a href="https://drive.google.com/file/d/16wFw_wRrmmFz8pleQ5c3kQUrYkkLUbtS/view?usp=sharing" target="_blank" class="btn btn-primary">
                             View Resume <i class="fas fa-eye"></i>
