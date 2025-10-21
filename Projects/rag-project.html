@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG (For Your Document) - Lakshya Tripathi Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --text-primary: #e94560;
+            --text-secondary: #f5f5f5;
+            --text-muted: #a0a0a0;
+            --accent: #0f3460;
+            --accent-bright: #e94560;
+            --accent-secondary: #f39c12;
+            --accent-glow: rgba(233, 69, 96, 0.3);
+            --border: #2c2c54;
+            --card-bg: #16213e;
+            --shadow: rgba(233, 69, 96, 0.2);
+            --shadow-glow: rgba(233, 69, 96, 0.4);
+            --gradient: linear-gradient(135deg, #e94560, #f39c12);
+            --gradient-2: linear-gradient(135deg, #0f3460, #e94560);
+            --gradient-3: linear-gradient(135deg, var(--accent-bright) 0%, var(--accent-secondary) 100%);
+            --particle-color: rgba(233, 69, 96, 0.6);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --text-primary: #2c3e50;
+            --text-secondary: #2c3e50;
+            --text-muted: #6c757d;
+            --card-bg: #ffffff;
+            --border: #dee2e6;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --shadow-glow: rgba(0, 0, 0, 0.2);
+            --particle-color: rgba(44, 62, 80, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            background: var(--bg-primary);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(233, 69, 96, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(15, 52, 96, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(243, 156, 18, 0.1) 0%, transparent 50%);
+            z-index: -2;
+            animation: backgroundPulse 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundPulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        /* Floating Particles */
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--particle-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--particle-color);
+            animation: floatUp 15s infinite linear;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Enhanced Header */
+        header {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0;
+            background: rgba(10, 10, 15, 0.95); 
+            backdrop-filter: blur(20px);
+            z-index: 1000; 
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-bright);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            margin: 0;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-bright);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-to-projects-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: rgba(233, 69, 96, 0.1);
+            border: 1px solid var(--accent-bright);
+            color: var(--accent-bright);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .back-to-projects-btn:hover {
+            background: var(--accent-bright);
+            color: var(--bg-primary);
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent-bright);
+            color: var(--accent-bright);
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Project Header */
+        .project-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            margin-top: 2rem;
+        }
+
+        .project-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .project-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border: 2px solid var(--accent-bright);
+            color: var(--accent-bright);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .btn:hover {
+            background: var(--accent-bright);
+            color: var(--bg-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow-glow);
+        }
+
+        /* Project Image */
+        .project-image {
+            width: 100%;
+            max-width: 680px;
+            height: auto;
+            border-radius: 12px;
+            margin: 2rem auto;
+            display: block;
+            box-shadow: 0 10px 30px var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        /* Content Sections */
+        .content-section {
+            margin-bottom: 2.5rem;
+            background: var(--card-bg);
+            padding: 1.8rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .content-section h2 {
+            font-size: 1.65rem;
+            color: var(--accent-bright);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-section h3 {
+            font-size: 1.2rem;
+            color: var(--accent-secondary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .content-section p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .content-section ul,
+        .content-section ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        .code-block code {
+            color: var(--accent-secondary);
+        }
+
+        /* Feature List */
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-item {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-bright);
+        }
+
+        .feature-item i {
+            color: var(--accent-bright);
+            margin-right: 0.5rem;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1.5rem 0;
+        }
+
+        .tech-badge {
+            padding: 0.4rem 0.9rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--accent-bright);
+            border-radius: 20px;
+            color: var(--accent-bright);
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Pipeline Diagram */
+        .pipeline {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .pipeline-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-secondary);
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        /* Footer */
+        .project-footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav-right {
+                gap: 0.5rem;
+            }
+
+            .back-to-projects-btn {
+                font-size: 0;
+                padding: 0.6rem;
+            }
+
+            .back-to-projects-btn i {
+                font-size: 1rem;
+                margin: 0;
+            }
+
+            .project-title {
+                font-size: 1.8rem;
+            }
+
+            .content-section h2 {
+                font-size: 1.4rem;
+            }
+
+            .feature-list {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 5rem 1.5rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles" id="particles"></div>
+
+    <header>
+        <nav>
+            <a href="../index.html" class="logo">lakshy.</a>
+            <ul class="nav-links">
+                <li><a href="../index.html#home">Home</a></li>
+                <li><a href="../index.html#about">About</a></li>
+                <li><a href="../index.html#skills">Skills</a></li>
+                <li><a href="../index.html#projects">Projects</a></li>
+                <li><a href="../index.html#contact">Contact</a></li>
+            </ul>
+            <div class="nav-right">
+                <a href="../index.html#projects" class="back-to-projects-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Projects
+                </a>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+
+        <div class="project-header">
+            <h1 class="project-title">📄 RAG (For Your Document)</h1>
+            <p class="project-subtitle">Advanced Retrieval-Augmented Generation System</p>
+            <div class="project-links">
+                <a href="https://github.com/lakshya1410/RAG_for_your_document" target="_blank" class="btn">
+                    <i class="fab fa-github"></i>
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+
+        <img src="https://github.com/user-attachments/assets/d03f9f13-8cfc-4e62-85e3-dbe16293808c" 
+             alt="RAG Pipeline Architecture" 
+             class="project-image"
+             width="680"
+             height="308">
+
+        <div class="content-section">
+            <h2><i class="fas fa-info-circle"></i> Overview</h2>
+            <p>
+                A powerful Retrieval-Augmented Generation (RAG) application that enables users to upload documents 
+                and query them using natural language. Built with cutting-edge AI technologies including Streamlit, 
+                LangChain, and Groq AI, this system provides intelligent answers backed by source attribution.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-star"></i> Key Features</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <i class="fas fa-file-alt"></i>
+                    <strong>Multi-format Support</strong><br>
+                    PDF, CSV, and TXT files
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-cogs"></i>
+                    <strong>Configurable Chunking</strong><br>
+                    Adjustable text chunking with overlap
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-database"></i>
+                    <strong>Local Vector Storage</strong><br>
+                    ChromaDB integration
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-search"></i>
+                    <strong>Semantic Search</strong><br>
+                    Sentence Transformers powered
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-brain"></i>
+                    <strong>AI-Powered Responses</strong><br>
+                    Groq's Gemma2-9b-it model
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-link"></i>
+                    <strong>Source Attribution</strong><br>
+                    Track answer sources
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-project-diagram"></i> RAG Pipeline Architecture</h2>
+            <div class="pipeline">
+                <div class="pipeline-text">
+                    Document Upload → Text Splitting → Embeddings → Vector Store → Similarity Search → LLM Context
+                </div>
+            </div>
+            <p>
+                The system processes documents through a sophisticated pipeline that converts text into embeddings, 
+                stores them in a vector database, performs similarity searches, and generates contextual responses 
+                using a large language model.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-wrench"></i> Technology Stack</h2>
+            <div class="tech-stack">
+                <span class="tech-badge">Streamlit</span>
+                <span class="tech-badge">LangChain</span>
+                <span class="tech-badge">Groq AI</span>
+                <span class="tech-badge">Gemma2-9b-it</span>
+                <span class="tech-badge">Sentence Transformers</span>
+                <span class="tech-badge">ChromaDB</span>
+                <span class="tech-badge">Python</span>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-download"></i> Installation</h2>
+            <div class="code-block">
+                <code># Clone the repository<br>
+git clone https://github.com/lakshya1410/RAG_for_your_document.git<br>
+cd RAG_for_your_document<br><br>
+
+# Install dependencies<br>
+pip install -r requirements.txt<br><br>
+
+# Create .env file with your Groq API key<br>
+echo "GROQ_API_KEY=your_groq_api_key_here" > .env</code>
+            </div>
+            <p>
+                <strong>Note:</strong> Get your free Groq API key from 
+                <a href="https://console.groq.com/" target="_blank" style="color: var(--accent-bright);">console.groq.com</a>
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-rocket"></i> Usage</h2>
+            <div class="code-block">
+                <code>streamlit run main.py</code>
+            </div>
+            <ol>
+                <li>Upload documents (PDF, CSV, TXT) via the sidebar</li>
+                <li>Configure chunk size (default: 1000) and overlap (default: 100)</li>
+                <li>Click "Submit & Process"</li>
+                <li>Ask questions and get AI-generated answers with source attribution</li>
+            </ol>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-code"></i> Programmatic Usage</h2>
+            <div class="code-block">
+                <code>from rag_pipeline import process_files, ask_question<br><br>
+
+# Process documents<br>
+with open('document.pdf', 'rb') as f:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;process_files([f], chunk_size=1000, chunk_overlap=100)<br><br>
+
+# Ask questions<br>
+answer, sources = ask_question("What is the main topic?", k=3)</code>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-bug"></i> Troubleshooting</h2>
+            <ul>
+                <li><strong>"GROQ_API_KEY not found":</strong> Create .env file with valid API key</li>
+                <li><strong>"Vector store is empty":</strong> Upload and process documents first</li>
+                <li><strong>"Error processing file":</strong> Ensure supported format (PDF, CSV, TXT) and valid encoding</li>
+            </ul>
+        </div>
+
+        <div class="project-footer">
+            Made with ❤️ by Lakshya Tripathi
+        </div>
+    </div>
+    </main>
+
+    <script>
+        // Create particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            particlesContainer.innerHTML = '';
+            const particleCount = 15;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 4 + 2;
+                const xPos = Math.random() * window.innerWidth;
+                const yPos = Math.random() * window.innerHeight;
+                const delay = Math.random() * 6;
+                
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = xPos + 'px';
+                particle.style.top = yPos + 'px';
+                particle.style.animationDelay = delay + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        createParticles();
+        window.addEventListener('resize', createParticles);
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        html.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+            createParticles();
+        });
+
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+    </script>
+</body>
+</html>
