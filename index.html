@@ -124,64 +124,6 @@
             border-radius: 3px;
         }
 
-        /* Custom Cursor */
-        * {
-            cursor: none;
-        }
-
-        .custom-cursor {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--accent-bright);
-            pointer-events: none;
-            z-index: 99999;
-            transition: transform 0.15s ease, background 0.3s ease, opacity 0.3s ease;
-            transform: translate(-50%, -50%);
-            mix-blend-mode: difference;
-        }
-
-        .cursor-follower {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            border: 2px solid var(--accent-bright);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 99998;
-            transition: transform 0.3s cubic-bezier(0.75, -0.27, 0.3, 1.33), 
-                        width 0.3s ease, 
-                        height 0.3s ease,
-                        border-color 0.3s ease,
-                        opacity 0.3s ease;
-            transform: translate(-50%, -50%);
-            opacity: 0.6;
-        }
-
-        .cursor-hover .custom-cursor {
-            transform: translate(-50%, -50%) scale(1.5);
-            background: var(--accent-secondary);
-        }
-
-        .cursor-hover .cursor-follower {
-            width: 60px;
-            height: 60px;
-            border-color: var(--accent-secondary);
-            opacity: 0.8;
-        }
-
-        /* Hide custom cursor on touch devices */
-        @media (hover: none) and (pointer: coarse) {
-            * {
-                cursor: auto;
-            }
-            .custom-cursor,
-            .cursor-follower {
-                display: none;
-            }
-        }
-
         /* Loading Screen */
         #loading-screen {
             position: fixed;
@@ -748,12 +690,17 @@
 
         /* Education Section */
         .education-timeline {
-            max-width: 800px; margin: 0 auto; position: relative;
+            max-width: 1000px; 
+            margin: 0 auto; 
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
         }
 
         .education-item {
             background: var(--card-bg); padding: 2rem; border-radius: 20px;
-            border: 1px solid var(--border); margin-bottom: 2rem;
+            border: 1px solid var(--border);
             transition: all 0.3s ease; position: relative; overflow: hidden;
         }
 
@@ -799,6 +746,87 @@
             display: inline-block; background: var(--accent); color: white;
             padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;
             font-weight: 500;
+        }
+
+        /* Experience Section - Horizontal Layout */
+        .experience-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .experience-item {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .experience-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            transform-origin: bottom;
+        }
+
+        .experience-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .experience-item:hover {
+            transform: translateY(-8px) translateX(-8px);
+            border-color: var(--accent-bright);
+            box-shadow: 0 20px 60px var(--shadow);
+        }
+
+        .experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .experience-item h3 {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+
+        .experience-item .company {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+        }
+
+        .experience-item .duration {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .experience-header {
+                flex-direction: column;
+            }
         }
 
         .skill-category {
@@ -1253,6 +1281,7 @@
             .section-title { font-size: 1.75rem; }
             .contact-content { grid-template-columns: 1fr; gap: 2rem; }
             .projects-grid { grid-template-columns: 1fr; }
+            .education-timeline { grid-template-columns: 1fr; gap: 1.5rem; }
             .skills-grid { 
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
                 gap: 1rem;
@@ -1344,9 +1373,6 @@
     </style>
 </head>
 <body>
-    <!-- Custom Cursor -->
-    <div class="custom-cursor"></div>
-    <div class="cursor-follower"></div>
     
     <!-- Loading Screen -->
     <div id="loading-screen">
@@ -1360,11 +1386,11 @@
         <nav class="container">
             <a href="#home" class="logo">lakshy.</a>
             <div class="nav-links">
-                <a href="#home" class="active">Home</a>
-                <a href="#about">About</a>
-                <a href="#education">Education</a>
+                <a href="#about" class="active">About</a>
+                <a href="#experience">Experience</a>
                 <a href="#projects">Projects</a>
                 <a href="#skills">Skills</a>
+                <a href="#education">Education</a>
                 <a href="#contact">Contact</a>
             </div>
             <div class="nav-right">
@@ -1395,20 +1421,20 @@
         </div>
         
         <div class="mobile-nav-links">
-            <a href="#home" class="active">
-                <i class="fas fa-home"></i> Home
-            </a>
-            <a href="#about">
+            <a href="#about" class="active">
                 <i class="fas fa-user"></i> About
             </a>
-            <a href="#education">
-                <i class="fas fa-graduation-cap"></i> Education
+            <a href="#experience">
+                <i class="fas fa-briefcase"></i> Experience
             </a>
             <a href="#projects">
                 <i class="fas fa-code"></i> Projects
             </a>
             <a href="#skills">
                 <i class="fas fa-cog"></i> Skills
+            </a>
+            <a href="#education">
+                <i class="fas fa-graduation-cap"></i> Education
             </a>
             <a href="#contact">
                 <i class="fas fa-envelope"></i> Contact
@@ -1447,13 +1473,13 @@
                     <div class="typing-container">
                         <h1 id="typingText" class="typing-text">Lakshya Tripathi</h1>
                     </div>
-                    <p class="hero-subtitle">CS-AI Engineer & Machine Learning Enthusiast</p>
+                    <p class="hero-subtitle">CS-AI Engineer & Agentic AI Enthusiast</p>
                     <div class="hero-cta">
                         <a href="#projects" class="btn btn-primary">
                             View My Work <i class="fas fa-arrow-right"></i>
                         </a>
-                        <a href="#contact" class="btn btn-secondary">
-                            Get In Touch <i class="fas fa-envelope"></i>
+                        <a href="https://drive.google.com/file/d/171b5SoKnj7A6Ly4SidMnlMozdxFmyqz4/view?usp=sharing" target="_blank" class="btn btn-secondary">
+                            Resume <i class="fas fa-file-alt"></i>
                         </a>
                     </div>
                 </div>
@@ -1481,22 +1507,20 @@
             </div>
         </section>
 
-        <section id="education" class="section">
+        <section id="experience" class="section">
             <div class="container">
-                <h2 class="section-title">Education</h2>
-                <p class="section-subtitle">My academic journey</p>
-                <div class="education-timeline">
-                    <div class="education-item">
-                        <h3>Bachelor of Technology</h3>
-                        <p class="institution">G L Bajaj Institute of Technology and Management, Greater Noida</p>
-                        <p class="branch">Branch: Computer Science with Artificial Intelligence</p>
-                        <span class="duration">2023 – 2027</span>
-                    </div>
-                    
-                    <div class="education-item">
-                        <h3>Intermediate (10+2)</h3>
-                        <p class="institution">St. Lawrence School, Unnao</p>
-                        <span class="duration">2020 – 2023</span>
+                <h2 class="section-title">Experience</h2>
+                <p class="section-subtitle">My professional journey</p>
+                <div class="experience-container">
+                    <div class="experience-item">
+                        <div class="experience-header">
+                            <div>
+                                <h3>AI Engineering Intern</h3>
+                                <p class="company">BotWot</p>
+                            </div>
+                            <span class="duration">Oct 2025 – Present</span>
+                        </div>
+                        <p class="branch">Building AI products and automation pipelines. Managing LLM integrations, workflow systems, and scalable AI deployments.</p>
                     </div>
                 </div>
             </div>
@@ -1782,10 +1806,37 @@
                         </div>
                         <div class="skill-card">
                             <div class="skill-icon">
+                                <i class="fab fa-aws"></i>
+                            </div>
+                            <span class="skill-name">AWS</span>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">
                                 <i class="fab fa-google"></i>
                             </div>
                             <span class="skill-name">Google OAuth</span>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="education" class="section">
+            <div class="container">
+                <h2 class="section-title">Education</h2>
+                <p class="section-subtitle">My academic journey</p>
+                <div class="education-timeline">
+                    <div class="education-item">
+                        <h3>Bachelor of Technology</h3>
+                        <p class="institution">G L Bajaj Institute of Technology and Management, Greater Noida</p>
+                        <p class="branch">Branch: Computer Science with Artificial Intelligence</p>
+                        <span class="duration">2023 – 2027</span>
+                    </div>
+                    
+                    <div class="education-item">
+                        <h3>Intermediate (10+2)</h3>
+                        <p class="institution">St. Lawrence School, Unnao</p>
+                        <span class="duration">2020 – 2023</span>
                     </div>
                 </div>
             </div>
@@ -1815,7 +1866,7 @@
                                 <a href="https://leetcode.com/u/lakshytripathi/" target="_blank"><i class="fas fa-code"></i></a>
                             </div>
                         </div>
-                        <a href="https://drive.google.com/file/d/16wFw_wRrmmFz8pleQ5c3kQUrYkkLUbtS/view?usp=sharing" target="_blank" class="btn btn-primary">
+                        <a href="https://drive.google.com/file/d/171b5SoKnj7A6Ly4SidMnlMozdxFmyqz4/view?usp=sharing" target="_blank" class="btn btn-primary">
                             View Resume <i class="fas fa-eye"></i>
                         </a>
                     </div>
@@ -1854,68 +1905,6 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Custom Cursor Animation
-        const cursor = document.querySelector('.custom-cursor');
-        const follower = document.querySelector('.cursor-follower');
-        
-        let mouseX = 0;
-        let mouseY = 0;
-        let followerX = 0;
-        let followerY = 0;
-        
-        // Track mouse movement
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            
-            // Update cursor position immediately
-            cursor.style.left = mouseX + 'px';
-            cursor.style.top = mouseY + 'px';
-        });
-        
-        // Smooth follower animation with lerp
-        function animateFollower() {
-            const speed = 0.15; // Adjust for smoothness (0.1 = slower, 0.3 = faster)
-            
-            followerX += (mouseX - followerX) * speed;
-            followerY += (mouseY - followerY) * speed;
-            
-            follower.style.left = followerX + 'px';
-            follower.style.top = followerY + 'px';
-            
-            requestAnimationFrame(animateFollower);
-        }
-        
-        animateFollower();
-        
-        // Add hover effect for interactive elements
-        const interactiveElements = document.querySelectorAll('a, button, .project-card, .social-link, input, textarea');
-        
-        interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
-                cursor.style.backgroundColor = 'var(--accent-secondary)';
-                follower.style.transform = 'translate(-50%, -50%) scale(1.5)';
-            });
-            
-            el.addEventListener('mouseleave', () => {
-                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-                cursor.style.backgroundColor = 'var(--accent-bright)';
-                follower.style.transform = 'translate(-50%, -50%) scale(1)';
-            });
-        });
-        
-        // Hide cursor when mouse leaves viewport
-        document.addEventListener('mouseleave', () => {
-            cursor.style.opacity = '0';
-            follower.style.opacity = '0';
-        });
-        
-        document.addEventListener('mouseenter', () => {
-            cursor.style.opacity = '1';
-            follower.style.opacity = '0.6';
-        });
-
         // Create floating particles
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
