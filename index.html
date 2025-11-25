@@ -231,7 +231,7 @@
                     <i data-lucide="code-2" class="w-4 h-4"></i> Featured Projects
                 </h3>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="projects-grid">
                     
                     <!-- Project 1 -->
                     <div class="group block p-4 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-all">
@@ -288,21 +288,22 @@
                         </div>
                     </div>
 
-                    <!-- Project 4 -->
+                    <!-- Project 4 (swapped) -->
                     <div class="group block p-4 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-all">
                         <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-bold text-neutral-900 dark:text-white group-hover:text-blue-500 transition-colors">JDmatcher</h4>
+                            <h4 class="font-bold text-neutral-900 dark:text-white group-hover:text-blue-500 transition-colors">AI Lead finder using MCP</h4>
                             <div class="flex items-center gap-3">
-                                <a href="Projects/jdmatcher-project.html" class="text-neutral-400 hover:text-blue-500 transition-colors" title="Details"><i data-lucide="info" class="w-4 h-4"></i></a>
-                                <a href="https://github.com/lakshya1410/JDmatcher" target="_blank" class="text-neutral-400 hover:text-blue-500 transition-colors"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+                                <a href="Projects/AI-lead-finder-using-mcp.html" class="text-neutral-400 hover:text-blue-500 transition-colors" title="Details"><i data-lucide="info" class="w-4 h-4"></i></a>
+                                <a href="https://github.com/lakshya1410/AI-lead-finder-using-mcp" target="_blank" class="text-neutral-400 hover:text-blue-500 transition-colors"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
                             </div>
                         </div>
                         <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
-                            AI-powered resume analyzer using Groq's Llama 3.3 70B. Identifies skill gaps and offers recommendations.
+                            Automated B2B lead discovery engine using Bright Data MCP & OpenAI. Features intelligent ICP matching, contact extraction, and confidence scoring.
                         </p>
                         <div class="flex flex-wrap gap-2">
-                            <span class="px-2 py-1 rounded bg-neutral-100 dark:bg-neutral-800 text-[10px] font-mono text-neutral-600 dark:text-neutral-400">Llama 3.3</span>
-                            <span class="px-2 py-1 rounded bg-neutral-100 dark:bg-neutral-800 text-[10px] font-mono text-neutral-600 dark:text-neutral-400">Streamlit</span>
+                            <span class="px-2 py-1 rounded bg-neutral-100 dark:bg-neutral-800 text-[10px] font-mono text-neutral-600 dark:text-neutral-400">Bright Data MCP</span>
+                            <span class="px-2 py-1 rounded bg-neutral-100 dark:bg-neutral-800 text-[10px] font-mono text-neutral-600 dark:text-neutral-400">OpenAI</span>
+                            <span class="px-2 py-1 rounded bg-neutral-100 dark:bg-neutral-800 text-[10px] font-mono text-neutral-600 dark:text-neutral-400">Flask</span>
                         </div>
                     </div>
 
@@ -324,8 +325,26 @@
                         </div>
                     </div>
 
-                     <!-- Project 6 -->
+                     <!-- Project 6 (swapped) -->
                      <div class="group block p-4 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-all">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-neutral-900 dark:text-white group-hover:text-blue-500 transition-colors">JDmatcher</h4>
+                            <div class="flex items-center gap-3">
+                                <a href="Projects/jdmatcher-project.html" class="text-neutral-400 hover:text-blue-500 transition-colors" title="Details"><i data-lucide="info" class="w-4 h-4"></i></a>
+                                <a href="https://github.com/lakshya1410/JDmatcher" target="_blank" class="text-neutral-400 hover:text-blue-500 transition-colors"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+                            </div>
+                        </div>
+                        <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
+                            AI-powered resume analyzer using Groq's Llama 3.3 70B. Identifies skill gaps and offers recommendations.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 rounded bg-neutral-100 dark:bg-neutral-800 text-[10px] font-mono text-neutral-600 dark:text-neutral-400">Llama 3.3</span>
+                            <span class="px-2 py-1 rounded bg-neutral-100 dark:bg-neutral-800 text-[10px] font-mono text-neutral-600 dark:text-neutral-400">Streamlit</span>
+                        </div>
+                    </div>
+
+                     <!-- Project 7 (Lotus Mind - Hidden) -->
+                     <div class="more-project hidden group block p-4 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-all">
                         <div class="flex justify-between items-start mb-2">
                             <h4 class="font-bold text-neutral-900 dark:text-white group-hover:text-blue-500 transition-colors">Lotus Mind</h4>
                             <div class="flex items-center gap-3">
@@ -341,6 +360,12 @@
                             <span class="px-2 py-1 rounded bg-neutral-100 dark:bg-neutral-800 text-[10px] font-mono text-neutral-600 dark:text-neutral-400">Streamlit</span>
                         </div>
                     </div>
+                </div>
+
+                <div class="flex justify-center mt-6">
+                    <button id="show-more-projects" class="px-4 py-2 bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 rounded-lg text-sm font-medium hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors">
+                        Show More
+                    </button>
                 </div>
             </section>
 
@@ -536,6 +561,19 @@
                 localStorage.setItem('theme', 'dark');
             }
         });
+        
+        // Show More Projects Logic
+        const showMoreBtn = document.getElementById('show-more-projects');
+        if (showMoreBtn) {
+            showMoreBtn.addEventListener('click', function() {
+                const hiddenProjects = document.querySelectorAll('.more-project');
+                hiddenProjects.forEach(project => {
+                    project.classList.remove('hidden');
+                    project.classList.add('animate-fade-in');
+                });
+                this.classList.add('hidden');
+            });
+        }
 
         // EmailJS Form
         const contactForm = document.getElementById('contact-form');
